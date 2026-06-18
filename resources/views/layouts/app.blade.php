@@ -5,7 +5,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <meta name="description" content="CosuRent - Platform sewa kostum cosplay terlengkap dan terpercaya. Temukan kostum anime, game, dan film favoritmu di sini!">
+        <meta name="keywords" content="sewa kostum, cosplay, rental kostum, anime, cosurent, cosplay rental">
+        <meta name="author" content="CosuRent">
+        <title>{{ $title ?? config('app.name', 'CosuRent') }} - Sewa Kostum Cosplay</title>
 
         <!-- Favicon -->
         <link rel="icon" href="{{ asset('icon.svg') }}" type="image/svg+xml">
