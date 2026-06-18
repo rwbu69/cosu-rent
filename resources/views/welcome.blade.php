@@ -22,7 +22,7 @@
                 </p>
                 <div class="flex flex-col gap-4 sm:flex-row">
                     <a href="{{ route('catalog.index') }}"
-                        class="px-10 py-4 text-sm tracking-widest text-center text-white transition-all bg-light-primary hover:bg-opacity-80">
+                        class="px-10 py-4 text-sm tracking-widest text-center transition-all text-slate-700 bg-light-primary hover:bg-opacity-80">
                         JELAJAHI KATALOG
                     </a>
                     <a href="#cara-sewa"

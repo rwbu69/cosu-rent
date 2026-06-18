@@ -50,15 +50,13 @@ Sistem Scanner QR Code digunakan oleh Admin di gudang untuk melakukan Pengecekan
 
 ## 3. Panduan Testing Mailtrap (Notifikasi Email)
 
-CosuRent menggunakan *driver* SMTP untuk mengirimkan email seperti bukti *booking*, konfirmasi pesanan, dan pengingat pengembalian. Mailtrap digunakan sebagai *server SMTP dummy* agar email tidak benar-benar terkirim ke alamat email asli pelanggan selama masa pengembangan/testing.
+CosuRent kini telah memiliki **5 fase notifikasi email** terintegrasi menggunakan *driver* SMTP. Mailtrap digunakan sebagai *server SMTP dummy* agar email tidak benar-benar terkirim ke alamat asli pelanggan selama masa testing.
 
 ### Persiapan (Setup):
 1. Buat akun gratis di [Mailtrap.io](https://mailtrap.io).
-2. Di *dashboard* Mailtrap, buat inbox baru (misal: "CosuRent Testing").
-3. Buka pengaturan Inbox tersebut dan pilih *Integration: Laravel*.
-4. Buka file `.env` di folder *root* proyek `uas_pwl` ini.
-5. Sesuaikan variabel `MAIL_*` dengan kredensial dari Mailtrap:
-
+2. Di *dashboard* Mailtrap, buat *inbox* baru (misal: "CosuRent Testing").
+3. Pilih *Integration: Laravel* untuk melihat kredensial Anda.
+4. Buka file `.env` dan sesuaikan kredensial `MAIL_*`:
 ```env
 MAIL_MAILER=smtp
 MAIL_HOST=sandbox.smtp.mailtrap.io
@@ -66,14 +64,35 @@ MAIL_PORT=2525
 MAIL_USERNAME=username_dari_mailtrap
 MAIL_PASSWORD=password_dari_mailtrap
 MAIL_ENCRYPTION=tls
-MAIL_FROM_ADDRESS="noreply@cosurent.com"
+MAIL_FROM_ADDRESS="hello@cosurent.com"
 MAIL_FROM_NAME="${APP_NAME}"
 ```
 
-### Skenario Testing:
-1. **Restart Server**: Jika `php artisan serve` atau *queue worker* sedang berjalan, matikan (Ctrl+C) dan nyalakan kembali agar file `.env` yang baru terbaca.
-2. Lakukan aksi yang memicu email di website, contoh:
-   - Mendaftarkan akun baru (jika fitur verifikasi email aktif).
-   - Checkout pesanan baru (pelanggan akan menerima invoice).
-   - Admin menyetujui pesanan (pelanggan menerima konfirmasi).
-3. **Ekspektasi Hasil**: Buka *dashboard* Mailtrap Anda. Dalam hitungan detik, email yang dikirim oleh sistem CosuRent akan muncul di kotak masuk (*inbox*) Mailtrap. Anda bisa melihat preview visual email, mengecek tampilan HTML-nya, dan memastikan data dinamis (seperti Nomor Pesanan dan Harga) tercetak dengan benar tanpa melakukan *spam* ke email sungguhan.
+5. **Penting:** Karena aplikasi ini menggunakan `ShouldQueue` (opsional jika aktif di `.env` `QUEUE_CONNECTION=database`), pastikan Anda menjalankan perintah ini di terminal baru agar email diproses:
+   ```bash
+   php artisan queue:work
+   ```
+   *(Catatan: Jika `.env` menggunakan `QUEUE_CONNECTION=sync`, perintah ini tidak diperlukan).*
+
+### Skenario Testing (5 Fase Email):
+1. **Fase Checkout (Order Placed & New Order Admin)**
+   - **Aksi:** Login sebagai User, pilih kostum, isi form pengiriman, unggah bukti bayar, lalu klik "Checkout".
+   - **Ekspektasi Mailtrap:** Akan masuk 2 email:
+     1. Email ke User: "Menunggu Konfirmasi: Pesanan #ID" (Invoice awal untuk user).
+     2. Email ke Admin: "PESANAN BARU MASUK: #ID" (Notifikasi untuk admin).
+
+2. **Fase Konfirmasi (Order Confirmed)**
+   - **Aksi:** Login sebagai Admin, buka menu **Pesanan Aktif**, lalu klik tombol **Konfirmasi** pada pesanan tadi.
+   - **Ekspektasi Mailtrap:** Masuk email ke User: "Dikonfirmasi: Pesanan #ID sedang diproses".
+
+3. **Fase Pengiriman (Order Shipped)**
+   - **Aksi:** Masih sebagai Admin, klik tombol **Kirim**, masukkan Ekspedisi dan Nomor Resi, lalu simpan.
+   - **Ekspektasi Mailtrap:** Masuk email ke User: "Paket Dikirim: Pesanan #ID" (Lengkap dengan nomor resi).
+
+4. **Fase Pengembalian (Order Returned)**
+   - **Aksi:** Login sebagai User, buka **Riwayat Pesanan**, klik **Kirim Kembali Pesanan**, lalu masukkan resi retur dan foto resi.
+   - **Ekspektasi Mailtrap:** Masuk email ke Admin: "Barang Dikembalikan: Pesanan #ID" (Pemberitahuan bahwa user sudah retur paket).
+
+5. **Fase Selesai & QC (Final Invoice)**
+   - **Aksi:** Login sebagai Admin, masuk ke menu **Pengembalian & QC**, scan barcode/centang komponen yang kembali, lalu tekan **Selesaikan QC & Pesanan**.
+   - **Ekspektasi Mailtrap:** Masuk email ke User: "Invoice Akhir: Pesanan #ID Selesai" (Berisi total denda keterlambatan/kerusakan jika ada, atau informasi pengembalian deposit).

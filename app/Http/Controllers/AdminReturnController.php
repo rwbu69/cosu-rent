@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use App\Models\CostumeComponent;
+use App\Mail\FinalInvoice;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class AdminReturnController extends Controller
 {
@@ -65,6 +68,12 @@ class AdminReturnController extends Controller
         } else {
             $bill = abs($refund);
             $msg = 'Berhasil: Pengembalian selesai. Deposit Rp ' . number_format($deposit, 0, ',', '.') . ' hangus, Denda Rp ' . number_format($penalty, 0, ',', '.') . '. User harus membayar sisa tagihan sebesar Rp ' . number_format($bill, 0, ',', '.');
+        }
+
+        try {
+            Mail::to($booking->user->email)->send(new FinalInvoice($booking));
+        } catch (\Exception $e) {
+            Log::error('Failed to send FinalInvoice email: ' . $e->getMessage());
         }
 
         return redirect()->route('admin.return.index')->with('success', $msg);

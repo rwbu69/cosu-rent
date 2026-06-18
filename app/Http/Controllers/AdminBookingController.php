@@ -6,6 +6,8 @@ use App\Models\Booking;
 use App\Mail\BookingConfirmed;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use App\Mail\OrderConfirmed;
+use App\Mail\OrderShipped;
 use Illuminate\Http\Request;
 
 class AdminBookingController extends Controller
@@ -42,10 +44,10 @@ class AdminBookingController extends Controller
 
         // Send email notification
         try {
-            Mail::to($booking->user->email)->send(new BookingConfirmed($booking));
+            Mail::to($booking->user->email)->send(new OrderConfirmed($booking));
         } catch (\Exception $e) {
             // Log error but don't fail the request since booking is confirmed
-            Log::error('Failed to send BookingConfirmed email: ' . $e->getMessage());
+            Log::error('Failed to send OrderConfirmed email: ' . $e->getMessage());
         }
 
         return back()->with('success', 'Berhasil: Pesanan telah dikonfirmasi dan email pemberitahuan telah dikirim ke pelanggan.');
@@ -91,6 +93,12 @@ class AdminBookingController extends Controller
             'shipping_receipt' => $request->shipping_receipt,
             'shipping_image_path' => $imagePath,
         ]);
+
+        try {
+            Mail::to($booking->user->email)->send(new OrderShipped($booking));
+        } catch (\Exception $e) {
+            Log::error('Failed to send OrderShipped email: ' . $e->getMessage());
+        }
 
         return back()->with('success', 'Berhasil: Pesanan dilabeli Sedang Dikirim dan data pengiriman disimpan.');
     }

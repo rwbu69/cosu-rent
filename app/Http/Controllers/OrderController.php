@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
+use App\Mail\OrderReturned;
 
 class OrderController extends Controller
 {
@@ -57,6 +61,12 @@ class OrderController extends Controller
             'return_shipping_receipt' => $request->return_shipping_receipt,
             'return_shipping_image_path' => $imagePath,
         ]);
+
+        try {
+            Mail::to('admin@cosurent.com')->send(new OrderReturned($booking));
+        } catch (\Exception $e) {
+            Log::error('Failed to send OrderReturned email: ' . $e->getMessage());
+        }
 
         return back()->with('success', 'Berhasil: Informasi resi pengiriman kembali telah disimpan. Terima kasih!');
     }

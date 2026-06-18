@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Booking;
 use App\Models\Cart;
+use App\Mail\OrderPlaced;
+use App\Mail\NewOrderAdmin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 class CheckoutController extends Controller
@@ -123,7 +127,7 @@ class CheckoutController extends Controller
             $days = $item->start_date->diffInDays($item->end_date) + 1;
             $itemPrice = ceil($days / 3) * $item->costume->base_price + $item->costume->deposit_price;
 
-            Booking::create([
+            $booking = Booking::create([
                 'user_id' => $user->id,
                 'costume_id' => $item->costume_id,
                 'start_date' => $item->start_date,
@@ -136,6 +140,11 @@ class CheckoutController extends Controller
                 'shipping_fee' => $shippingFee,
                 'order_group_id' => $orderGroupId,
             ]);
+
+            if ($status === 'Menunggu Konfirmasi') {
+                Mail::to($user->email)->send(new OrderPlaced($booking));
+                Mail::to('admin@cosurent.com')->send(new NewOrderAdmin($booking));
+            }
         }
 
         $cart->items()->delete();
