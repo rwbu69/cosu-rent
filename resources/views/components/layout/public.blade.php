@@ -14,14 +14,14 @@
     <body class="flex flex-col min-h-screen font-sans antialiased text-gray-800 bg-white">
 
         <!-- Sticky Navbar -->
-        <nav x-data="{ open: false }" class="sticky top-0 z-50 bg-white border-b-2 border-gray-900">
+        <nav x-data="{ open: false }" class="sticky top-0 z-50 bg-white border-b border-gray-100">
             <div class="px-6 mx-auto max-w-7xl sm:px-8 lg:px-10">
                 <div class="flex justify-between h-16 relative">
                     <!-- Left: Logo & Brand -->
                     <div class="flex items-center">
                         <a href="{{ route('catalog.index') }}" class="flex items-center gap-3">
                             <img src="{{ asset('icon.svg') }}" alt="Logo" class="w-auto h-8">
-                            <span class="hidden text-xl font-black tracking-tight text-gray-900 sm:block uppercase">CosuRent</span>
+                            <span class="hidden text-xl font-light tracking-widest text-gray-900 sm:block uppercase">CosuRent</span>
                         </a>
                     </div>
 
@@ -84,8 +84,8 @@
                                 </x-slot>
                             </x-dropdown>
                         @else
-                            <a href="{{ route('login') }}" class="font-bold text-gray-900 hover:underline">Masuk</a>
-                            <a href="{{ route('register') }}" class="bg-gray-900 text-white font-bold px-6 py-2.5 hover:bg-primary hover:text-gray-900 transition-colors">
+                            <a href="{{ route('login') }}" class="text-sm font-light tracking-widest text-gray-500 uppercase hover:text-primary transition-colors">Masuk</a>
+                            <a href="{{ route('register') }}" class="px-6 py-2 text-sm font-light tracking-widest text-gray-500 uppercase transition-colors border border-gray-300 hover:border-primary hover:text-primary">
                                 Daftar
                             </a>
                         @endauth

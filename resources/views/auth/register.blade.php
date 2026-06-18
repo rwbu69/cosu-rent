@@ -1,7 +1,7 @@
 <x-guest-layout>
     <div class="text-center mb-8 flex flex-col items-center">
         <img src="{{ asset('icon.svg') }}" alt="Logo" class="w-16 h-16 mb-4">
-        <h2 class="text-2xl font-black text-gray-900 uppercase tracking-wide">Register</h2>
+        <h2 class="text-2xl font-medium text-gray-900 uppercase tracking-wide">Register</h2>
     </div>
 
     <form method="POST" action="{{ route('register') }}">

@@ -8,13 +8,13 @@
 
         <div>
             <label for="name" class="block font-bold mb-2 text-gray-900 uppercase text-sm">Nama</label>
-            <input id="name" name="name" type="text" class="w-full border-2 border-gray-900 p-3 focus:ring-0 focus:border-primary font-medium" value="{{ old('name', $user->name) }}" required autofocus autocomplete="name" />
+            <input id="name" name="name" type="text" class="w-full border border-gray-200 rounded-md p-3 focus:ring-0 focus:border-primary font-medium" value="{{ old('name', $user->name) }}" required autofocus autocomplete="name" />
             <x-input-error class="mt-2 text-red-600 font-bold" :messages="$errors->get('name')" />
         </div>
 
         <div>
             <label for="email" class="block font-bold mb-2 text-gray-900 uppercase text-sm">Email</label>
-            <input id="email" name="email" type="email" class="w-full border-2 border-gray-900 p-3 focus:ring-0 focus:border-primary font-medium" value="{{ old('email', $user->email) }}" required autocomplete="username" />
+            <input id="email" name="email" type="email" class="w-full border border-gray-200 rounded-md p-3 focus:ring-0 focus:border-primary font-medium" value="{{ old('email', $user->email) }}" required autocomplete="username" />
             <x-input-error class="mt-2 text-red-600 font-bold" :messages="$errors->get('email')" />
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
@@ -38,26 +38,26 @@
 
         <div>
             <label for="phone_number" class="block font-bold mb-2 text-gray-900 uppercase text-sm">Nomor Telepon / WhatsApp</label>
-            <input id="phone_number" name="phone_number" type="text" class="w-full border-2 border-gray-900 p-3 focus:ring-0 focus:border-primary font-medium" value="{{ old('phone_number', $user->phone_number) }}" autocomplete="tel" />
+            <input id="phone_number" name="phone_number" type="text" class="w-full border border-gray-200 rounded-md p-3 focus:ring-0 focus:border-primary font-medium" value="{{ old('phone_number', $user->phone_number) }}" autocomplete="tel" />
             <x-input-error class="mt-2 text-red-600 font-bold" :messages="$errors->get('phone_number')" />
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
                 <label for="bank_name" class="block font-bold mb-2 text-gray-900 uppercase text-sm">Nama Bank (Untuk Refund)</label>
-                <input id="bank_name" name="bank_name" type="text" class="w-full border-2 border-gray-900 p-3 focus:ring-0 focus:border-primary font-medium" value="{{ old('bank_name', $user->bank_name) }}" placeholder="Misal: BCA, Mandiri, BNI" />
+                <input id="bank_name" name="bank_name" type="text" class="w-full border border-gray-200 rounded-md p-3 focus:ring-0 focus:border-primary font-medium" value="{{ old('bank_name', $user->bank_name) }}" placeholder="Misal: BCA, Mandiri, BNI" />
                 <x-input-error class="mt-2 text-red-600 font-bold" :messages="$errors->get('bank_name')" />
             </div>
 
             <div>
                 <label for="bank_account_number" class="block font-bold mb-2 text-gray-900 uppercase text-sm">Nomor Rekening Bank</label>
-                <input id="bank_account_number" name="bank_account_number" type="text" class="w-full border-2 border-gray-900 p-3 focus:ring-0 focus:border-primary font-medium" value="{{ old('bank_account_number', $user->bank_account_number) }}" placeholder="Nomor rekening Anda" />
+                <input id="bank_account_number" name="bank_account_number" type="text" class="w-full border border-gray-200 rounded-md p-3 focus:ring-0 focus:border-primary font-medium" value="{{ old('bank_account_number', $user->bank_account_number) }}" placeholder="Nomor rekening Anda" />
                 <x-input-error class="mt-2 text-red-600 font-bold" :messages="$errors->get('bank_account_number')" />
             </div>
         </div>
 
         <div class="flex items-center gap-4 pt-4 border-t-2 border-gray-900">
-            <button class="bg-gray-900 text-white font-bold px-8 py-3 border-2 border-gray-900 hover:bg-primary hover:text-gray-900 transition-colors uppercase">
+            <button class="bg-gray-900 text-white font-bold px-8 py-3 border border-gray-200 rounded-md hover:bg-primary hover:text-gray-900 transition-colors uppercase">
                 Simpan Perubahan
             </button>
 

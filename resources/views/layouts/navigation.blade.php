@@ -35,7 +35,7 @@
                 @auth
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
-                            <button class="inline-flex items-center px-4 py-2 border-2 border-gray-900 text-sm leading-4 font-bold text-gray-900 bg-white hover:bg-white focus:outline-none transition ease-in-out duration-150 shadow-[4px_4px_0px_0px_rgba(17,24,39,1)]">
+                            <button class="inline-flex items-center px-4 py-2 border border-gray-200 rounded-md text-sm leading-4 font-bold text-gray-900 bg-white hover:bg-white focus:outline-none transition ease-in-out duration-150 shadow-sm">
                                 <div>{{ Auth::user()->name }}</div>
 
                                 <div class="ms-1">
@@ -66,7 +66,7 @@
                 @else
                     <div class="space-x-4">
                         <a href="{{ route('login') }}" class="font-bold text-gray-900 hover:underline">Masuk</a>
-                        <a href="{{ route('register') }}" class="inline-block bg-primary text-gray-900 font-extrabold px-4 py-2 border-2 border-gray-900 shadow-[4px_4px_0px_0px_rgba(17,24,39,1)] hover:-translate-y-1 hover:shadow-[6px_6px_0px_0px_rgba(17,24,39,1)] transition-all">Daftar</a>
+                        <a href="{{ route('register') }}" class="inline-block bg-primary text-gray-900 font-extrabold px-4 py-2 border border-gray-200 rounded-md shadow-sm hover:-translate-y-1 hover:shadow-sm transition-all">Daftar</a>
                     </div>
                 @endauth
             </div>

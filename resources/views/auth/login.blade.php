@@ -4,7 +4,7 @@
 
     <div class="flex flex-col items-center mb-8 text-center">
         <img src="{{ asset('icon.svg') }}" alt="Logo" class="w-16 h-16 mb-4">
-        <h2 class="text-2xl font-black tracking-wide text-gray-900 uppercase">Login</h2>
+        <h2 class="text-2xl font-medium tracking-wide text-gray-900 uppercase">Login</h2>
     </div>
 
     <form method="POST" action="{{ route('login') }}">

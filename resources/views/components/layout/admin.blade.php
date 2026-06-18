@@ -14,44 +14,44 @@
     <body class="font-sans antialiased text-gray-900 bg-white flex h-screen overflow-hidden selection:bg-primary selection:text-white">
         
         <!-- Sidebar -->
-        <aside class="w-64 bg-slate-900 flex-shrink-0 flex flex-col h-full z-20 shadow-xl border-r border-slate-800">
+        <aside class="w-64 bg-white flex-shrink-0 flex flex-col h-full z-20 border-r border-gray-100">
             <!-- Logo Area -->
-            <div class="h-16 flex items-center px-6 border-b-2 border-slate-800 bg-slate-900">
+            <div class="h-16 flex items-center px-6 border-b border-gray-100">
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3">
                     <img src="{{ asset('icon.svg') }}" alt="Logo" class="h-8 w-auto">
-                    <span class="text-white font-black text-xl tracking-widest uppercase">Admin</span>
+                    <span class="text-gray-900 font-light text-xl tracking-widest uppercase">Admin</span>
                 </a>
             </div>
 
             <!-- Navigation -->
-            <nav class="flex-1 px-4 py-6 space-y-3 overflow-y-auto">
-                <p class="px-2 text-xs font-black text-slate-500 uppercase tracking-widest mb-6">Menu Utama</p>
+            <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
+                <p class="px-4 text-xs font-light text-gray-400 uppercase tracking-widest mb-6">Menu Utama</p>
                 
-                <a href="{{ route('admin.dashboard') }}" class="block px-4 py-3 font-bold transition-all border-2 {{ request()->routeIs('admin.dashboard') ? 'bg-primary text-gray-900 border-primary shadow-[4px_4px_0_0_rgba(255,46,99,0.5)] -translate-y-0.5' : 'border-slate-700 text-slate-300 hover:border-slate-500 hover:text-white hover:bg-slate-800' }} uppercase tracking-wider text-sm">
+                <a href="{{ route('admin.dashboard') }}" class="block px-4 py-3 font-light transition-colors {{ request()->routeIs('admin.dashboard') ? 'text-primary bg-primary/5 rounded-md' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-md' }} uppercase tracking-widest text-sm">
                     Dasbor Utama
                 </a>
-                <a href="{{ route('admin.bookings.index') }}" class="block px-4 py-3 font-bold transition-all border-2 {{ request()->routeIs('admin.bookings.*') ? 'bg-primary text-gray-900 border-primary shadow-[4px_4px_0_0_rgba(255,46,99,0.5)] -translate-y-0.5' : 'border-slate-700 text-slate-300 hover:border-slate-500 hover:text-white hover:bg-slate-800' }} uppercase tracking-wider text-sm">
+                <a href="{{ route('admin.bookings.index') }}" class="block px-4 py-3 font-light transition-colors {{ request()->routeIs('admin.bookings.*') ? 'text-primary bg-primary/5 rounded-md' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-md' }} uppercase tracking-widest text-sm">
                     Pesanan Masuk
                 </a>
-                <a href="{{ route('admin.return.index') }}" class="block px-4 py-3 font-bold transition-all border-2 {{ request()->routeIs('admin.return.*') ? 'bg-primary text-gray-900 border-primary shadow-[4px_4px_0_0_rgba(255,46,99,0.5)] -translate-y-0.5' : 'border-slate-700 text-slate-300 hover:border-slate-500 hover:text-white hover:bg-slate-800' }} uppercase tracking-wider text-sm">
+                <a href="{{ route('admin.return.index') }}" class="block px-4 py-3 font-light transition-colors {{ request()->routeIs('admin.return.*') ? 'text-primary bg-primary/5 rounded-md' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-md' }} uppercase tracking-widest text-sm">
                     Pengembalian & QC
                 </a>
-                <a href="{{ route('admin.katalog.index') }}" class="block px-4 py-3 font-bold transition-all border-2 {{ request()->routeIs('admin.katalog.*') ? 'bg-primary text-gray-900 border-primary shadow-[4px_4px_0_0_rgba(255,46,99,0.5)] -translate-y-0.5' : 'border-slate-700 text-slate-300 hover:border-slate-500 hover:text-white hover:bg-slate-800' }} uppercase tracking-wider text-sm">
+                <a href="{{ route('admin.katalog.index') }}" class="block px-4 py-3 font-light transition-colors {{ request()->routeIs('admin.katalog.*') ? 'text-primary bg-primary/5 rounded-md' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-md' }} uppercase tracking-widest text-sm">
                     Manajemen Katalog
                 </a>
-                <a href="{{ route('admin.users.index') }}" class="block px-4 py-3 font-bold transition-all border-2 {{ request()->routeIs('admin.users.*') ? 'bg-primary text-gray-900 border-primary shadow-[4px_4px_0_0_rgba(255,46,99,0.5)] -translate-y-0.5' : 'border-slate-700 text-slate-300 hover:border-slate-500 hover:text-white hover:bg-slate-800' }} uppercase tracking-wider text-sm">
+                <a href="{{ route('admin.users.index') }}" class="block px-4 py-3 font-light transition-colors {{ request()->routeIs('admin.users.*') ? 'text-primary bg-primary/5 rounded-md' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-md' }} uppercase tracking-widest text-sm">
                     Data Pelanggan
                 </a>
-                <a href="{{ route('admin.report.index') }}" class="block px-4 py-3 font-bold transition-all border-2 {{ request()->routeIs('admin.report.*') ? 'bg-primary text-gray-900 border-primary shadow-[4px_4px_0_0_rgba(255,46,99,0.5)] -translate-y-0.5' : 'border-slate-700 text-slate-300 hover:border-slate-500 hover:text-white hover:bg-slate-800' }} uppercase tracking-wider text-sm">
+                <a href="{{ route('admin.report.index') }}" class="block px-4 py-3 font-light transition-colors {{ request()->routeIs('admin.report.*') ? 'text-primary bg-primary/5 rounded-md' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-md' }} uppercase tracking-widest text-sm">
                     Laporan Keuangan
                 </a>
             </nav>
 
             <!-- Bottom Area: Logout -->
-            <div class="p-4 border-t border-slate-800">
+            <div class="p-4 border-t border-gray-100">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="w-full text-center block px-4 py-3 font-bold transition-all border-2 border-slate-700 text-red-400 hover:border-red-500 hover:text-white hover:bg-red-600 uppercase tracking-wider text-sm">
+                    <button type="submit" class="w-full text-center block px-4 py-3 font-light transition-colors text-red-500 hover:text-red-700 hover:bg-red-50 rounded-md uppercase tracking-widest text-sm">
                         Keluar
                     </button>
                 </form>
@@ -62,16 +62,16 @@
         <div class="flex-1 flex flex-col h-full overflow-hidden bg-gray-50">
             
             <!-- Topbar -->
-            <header class="h-16 bg-white border-b-2 border-gray-900 flex items-center justify-between px-6 z-10 flex-shrink-0">
+            <header class="h-16 bg-white border-b border-gray-100 flex items-center justify-between px-6 z-10 flex-shrink-0">
                 <!-- Breadcrumbs/Title -->
-                <div class="font-black text-gray-900 text-xl uppercase tracking-widest">
+                <div class="font-light text-gray-900 text-xl tracking-widest">
                     {{ $title ?? 'Manajemen Sistem' }}
                 </div>
 
                 <!-- Right Side (Profile & Scanner Status) -->
                 <div class="flex items-center gap-6">
-                    <div class="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-gray-900 bg-white px-3 py-1.5 border-2 border-gray-900 shadow-[2px_2px_0_0_rgba(17,24,39,1)]">
-                        <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="square" stroke-linejoin="miter" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm14 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
+                    <div class="flex items-center gap-2 text-xs font-light tracking-widest text-primary px-3 py-1.5 border border-primary/20 rounded-full bg-primary/5">
+                        <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm14 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
                         Scanner Aktif
                     </div>
                 </div>

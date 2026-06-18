@@ -30,22 +30,22 @@
                         <nav class="flex flex-col p-6 space-y-4 font-bold text-lg">
                             <p class="text-xs font-extrabold text-gray-400 uppercase tracking-wider mb-2">Admin Menu</p>
                             
-                            <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 border-2 border-transparent hover:border-gray-900 hover:bg-white transition-colors {{ request()->routeIs('admin.dashboard') ? 'bg-primary text-gray-900 border-gray-900 shadow-[4px_4px_0px_0px_rgba(17,24,39,1)]' : 'text-gray-600' }}">
+                            <a href="{{ route('admin.dashboard') }}" class="block px-4 py-2 border-2 border-transparent hover:border-gray-900 hover:bg-white transition-colors {{ request()->routeIs('admin.dashboard') ? 'bg-primary text-gray-900 border-gray-900 shadow-sm' : 'text-gray-600' }}">
                                 Dashboard
                             </a>
-                            <a href="{{ route('admin.bookings.index') }}" class="block px-4 py-2 border-2 border-transparent hover:border-gray-900 hover:bg-white transition-colors {{ request()->routeIs('admin.bookings.*') ? 'bg-primary text-gray-900 border-gray-900 shadow-[4px_4px_0px_0px_rgba(17,24,39,1)]' : 'text-gray-600' }}">
+                            <a href="{{ route('admin.bookings.index') }}" class="block px-4 py-2 border-2 border-transparent hover:border-gray-900 hover:bg-white transition-colors {{ request()->routeIs('admin.bookings.*') ? 'bg-primary text-gray-900 border-gray-900 shadow-sm' : 'text-gray-600' }}">
                                 Pesanan Masuk
                             </a>
-                            <a href="{{ route('admin.return.index') }}" class="block px-4 py-2 border-2 border-transparent hover:border-gray-900 hover:bg-white transition-colors {{ request()->routeIs('admin.return.*') ? 'bg-primary text-gray-900 border-gray-900 shadow-[4px_4px_0px_0px_rgba(17,24,39,1)]' : 'text-gray-600' }}">
+                            <a href="{{ route('admin.return.index') }}" class="block px-4 py-2 border-2 border-transparent hover:border-gray-900 hover:bg-white transition-colors {{ request()->routeIs('admin.return.*') ? 'bg-primary text-gray-900 border-gray-900 shadow-sm' : 'text-gray-600' }}">
                                 QC Return
                             </a>
-                            <a href="{{ route('admin.katalog.index') }}" class="block px-4 py-2 border-2 border-transparent hover:border-gray-900 hover:bg-white transition-colors {{ request()->routeIs('admin.katalog.*') ? 'bg-primary text-gray-900 border-gray-900 shadow-[4px_4px_0px_0px_rgba(17,24,39,1)]' : 'text-gray-600' }}">
+                            <a href="{{ route('admin.katalog.index') }}" class="block px-4 py-2 border-2 border-transparent hover:border-gray-900 hover:bg-white transition-colors {{ request()->routeIs('admin.katalog.*') ? 'bg-primary text-gray-900 border-gray-900 shadow-sm' : 'text-gray-600' }}">
                                 Katalog Kostum
                             </a>
-                            <a href="{{ route('admin.users.index') }}" class="block px-4 py-2 border-2 border-transparent hover:border-gray-900 hover:bg-white transition-colors {{ request()->routeIs('admin.users.*') ? 'bg-primary text-gray-900 border-gray-900 shadow-[4px_4px_0px_0px_rgba(17,24,39,1)]' : 'text-gray-600' }}">
+                            <a href="{{ route('admin.users.index') }}" class="block px-4 py-2 border-2 border-transparent hover:border-gray-900 hover:bg-white transition-colors {{ request()->routeIs('admin.users.*') ? 'bg-primary text-gray-900 border-gray-900 shadow-sm' : 'text-gray-600' }}">
                                 Data Pelanggan
                             </a>
-                            <a href="{{ route('admin.report.index') }}" class="block px-4 py-2 border-2 border-transparent hover:border-gray-900 hover:bg-white transition-colors {{ request()->routeIs('admin.report.*') ? 'bg-primary text-gray-900 border-gray-900 shadow-[4px_4px_0px_0px_rgba(17,24,39,1)]' : 'text-gray-600' }}">
+                            <a href="{{ route('admin.report.index') }}" class="block px-4 py-2 border-2 border-transparent hover:border-gray-900 hover:bg-white transition-colors {{ request()->routeIs('admin.report.*') ? 'bg-primary text-gray-900 border-gray-900 shadow-sm' : 'text-gray-600' }}">
                                 Laporan Keuangan
                             </a>
                         </nav>
@@ -56,7 +56,7 @@
                 <div class="flex-grow flex flex-col w-full overflow-x-hidden">
                     <!-- Page Heading -->
                     @isset($header)
-                        <header class="bg-white border-b-2 border-gray-900">
+                        <header class="bg-white border-b border-gray-100">
                             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                                 {{ $header }}
                             </div>

@@ -1,17 +1,17 @@
     <button
         x-data=""
         x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')"
-        class="bg-red-600 text-white font-bold px-8 py-3 border-2 border-gray-900 hover:bg-red-700 transition-colors uppercase"
+        class="bg-red-600 text-white font-bold px-8 py-3 border border-gray-200 rounded-md hover:bg-red-700 transition-colors uppercase"
     >
         {{ __('Hapus Akun') }}
     </button>
 
     <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
-        <form method="post" action="{{ route('profile.destroy') }}" class="p-8 border-2 border-gray-900">
+        <form method="post" action="{{ route('profile.destroy') }}" class="p-8 border border-gray-200 rounded-md">
             @csrf
             @method('delete')
 
-            <h2 class="text-2xl font-black text-gray-900 uppercase">
+            <h2 class="text-2xl font-medium text-gray-900 uppercase">
                 Apakah Anda yakin ingin menghapus akun Anda?
             </h2>
 
@@ -26,7 +26,7 @@
                     id="password"
                     name="password"
                     type="password"
-                    class="w-full border-2 border-gray-900 p-3 focus:ring-0 focus:border-red-600 font-medium"
+                    class="w-full border border-gray-200 rounded-md p-3 focus:ring-0 focus:border-red-600 font-medium"
                     placeholder="{{ __('Password') }}"
                 />
 
@@ -34,11 +34,11 @@
             </div>
 
             <div class="mt-6 flex justify-end gap-4 border-t-2 border-gray-900 pt-4">
-                <button x-on:click="$dispatch('close')" class="bg-white text-gray-900 font-bold px-6 py-3 border-2 border-gray-900 hover:bg-gray-100 transition-colors uppercase">
+                <button x-on:click="$dispatch('close')" class="bg-white text-gray-900 font-bold px-6 py-3 border border-gray-200 rounded-md hover:bg-gray-100 transition-colors uppercase">
                     Batal
                 </button>
 
-                <button class="bg-red-600 text-white font-bold px-6 py-3 border-2 border-gray-900 hover:bg-red-700 transition-colors uppercase">
+                <button class="bg-red-600 text-white font-bold px-6 py-3 border border-gray-200 rounded-md hover:bg-red-700 transition-colors uppercase">
                     Hapus Akun
                 </button>
             </div>
