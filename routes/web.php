@@ -32,6 +32,7 @@ Route::get('/dashboard', function (\Illuminate\Http\Request $request) {
 
 Route::get('/katalog', [CatalogController::class, 'index'])->name('catalog.index');
 Route::get('/katalog/{id}', [CatalogController::class, 'show'])->name('catalog.show');
+Route::view('/tentang-kami', 'about')->name('about');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

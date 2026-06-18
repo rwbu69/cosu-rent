@@ -25,9 +25,9 @@
                         class="px-10 py-4 text-sm tracking-widest text-center transition-all text-slate-700 bg-light-primary hover:bg-opacity-80">
                         JELAJAHI KATALOG
                     </a>
-                    <a href="#cara-sewa"
+                    <a href="{{ route('register') }}"
                         class="px-10 py-4 text-sm tracking-widest text-center text-white transition-all bg-transparent border border-white hover:border-secondary hover:text-secondary">
-                        PELAJARI SISTEM
+                        DAFTAR SEKARANG
                     </a>
                 </div>
             </div>
@@ -82,7 +82,8 @@
                             <div class="flex flex-col items-end pt-4 mt-auto border-t border-gray-100">
                                 <div class="flex items-center justify-between w-full mb-1">
                                     <span class="text-xs font-medium tracking-wider text-gray-500 uppercase">Sewa</span>
-                                    <span class="text-base font-extrabold text-primary">Rp {{ number_format($costume->base_price, 0, ',', '.') }}</span>
+                                    <span class="text-base font-extrabold text-primary">Rp
+                                        {{ number_format($costume->base_price, 0, ',', '.') }}</span>
                                 </div>
                                 <span class="text-[10px] text-gray-400 font-medium italic">*Belum termasuk ongkir</span>
                             </div>
@@ -98,6 +99,8 @@
             </div>
         </div>
     </section>
+
+
 
     <!-- Bento Box "Cara Sewa" -->
     {{-- <section id="cara-sewa" class="py-16 bg-white md:py-24">
