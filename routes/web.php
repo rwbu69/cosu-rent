@@ -74,6 +74,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/bookings', [AdminBookingController::class, 'index'])->name('bookings.index');
         Route::get('/bookings/history', [AdminBookingController::class, 'history'])->name('bookings.history');
         Route::post('/bookings/{booking}/confirm', [AdminBookingController::class, 'confirm'])->name('bookings.confirm');
+        Route::post('/bookings/{booking}/reject', [AdminBookingController::class, 'reject'])->name('bookings.reject');
         Route::post('/bookings/{booking}/fee', [AdminBookingController::class, 'updateFee'])->name('bookings.fee');
         Route::post('/bookings/{booking}/ship', [AdminBookingController::class, 'ship'])->name('bookings.ship');
 
