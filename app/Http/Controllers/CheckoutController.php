@@ -106,6 +106,7 @@ class CheckoutController extends Controller
 
         $orderGroupId = \Illuminate\Support\Str::uuid()->toString();
 
+        $mailDelaySeconds = 0;
         foreach ($cart->items as $item) {
             $isBooked = Booking::where('costume_id', $item->costume_id)
                 ->where('status', '!=', 'Returned')
@@ -142,8 +143,10 @@ class CheckoutController extends Controller
             ]);
 
             if ($status === 'Menunggu Konfirmasi') {
-                Mail::to($user->email)->send(new OrderPlaced($booking));
-                Mail::to('admin@cosurent.com')->send(new NewOrderAdmin($booking));
+                Mail::to($user->email)->later(now()->addSeconds($mailDelaySeconds), new OrderPlaced($booking));
+                $mailDelaySeconds += 3; // Delay 3 seconds to avoid Mailtrap 550 Rate Limit
+                Mail::to('admin@cosurent.com')->later(now()->addSeconds($mailDelaySeconds), new NewOrderAdmin($booking));
+                $mailDelaySeconds += 3;
             }
         }
 
