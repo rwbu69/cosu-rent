@@ -19,7 +19,7 @@
                     <option value="L" {{ request('size') == 'L' ? 'selected' : '' }}>L</option>
                     <option value="All Size" {{ request('size') == 'All Size' ? 'selected' : '' }}>All Size</option>
                 </select>
-                <button type="submit" class="bg-gray-900 text-white font-bold px-8 py-3 hover:bg-primary hover:text-gray-900 transition-colors border-l-2 border-gray-900 uppercase">Cari</button>
+                <button type="submit" class="bg-gray-900 text-white font-bold px-8 py-3 hover:bg-light-primary hover:text-gray-900 transition-colors border-l-2 border-gray-900 uppercase">Cari</button>
             </form>
         </div>
 
@@ -32,8 +32,9 @@
                         @else
                             <div class="w-full h-full flex items-center justify-center font-bold text-gray-400">NO IMAGE</div>
                         @endif
-                        <div class="absolute top-0 right-0 bg-primary text-gray-900 font-bold px-4 py-2 border-b-2 border-l-2 border-gray-900">
-                            Rp {{ number_format($costume->base_price, 0, ',', '.') }}
+                        <div class="absolute top-0 right-0 bg-primary text-gray-900 px-4 py-2 border-b-2 border-l-2 border-gray-900 flex flex-col items-end">
+                            <span class="font-bold">Rp {{ number_format($costume->base_price, 0, ',', '.') }}</span>
+                            <span class="text-[9px] font-medium opacity-80 leading-tight">*Belum termasuk ongkir</span>
                         </div>
                     </div>
                     <div class="p-6 flex flex-col flex-grow justify-between bg-white group-hover:bg-white transition-colors">

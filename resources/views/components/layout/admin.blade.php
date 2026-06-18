@@ -30,14 +30,20 @@
                 <a href="{{ route('admin.dashboard') }}" class="block px-4 py-3 font-light transition-colors {{ request()->routeIs('admin.dashboard') ? 'text-primary bg-primary/5 rounded-md' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-md' }} uppercase tracking-widest text-sm">
                     Dasbor Utama
                 </a>
-                <a href="{{ route('admin.bookings.index') }}" class="block px-4 py-3 font-light transition-colors {{ request()->routeIs('admin.bookings.*') ? 'text-primary bg-primary/5 rounded-md' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-md' }} uppercase tracking-widest text-sm">
-                    Pesanan Masuk
+                <a href="{{ route('admin.bookings.index') }}" class="block px-4 py-3 font-light transition-colors {{ request()->routeIs('admin.bookings.index') ? 'text-primary bg-primary/5 rounded-md' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-md' }} uppercase tracking-widest text-sm">
+                    Pesanan Aktif
+                </a>
+                <a href="{{ route('admin.bookings.history') }}" class="block px-4 py-3 font-light transition-colors {{ request()->routeIs('admin.bookings.history') ? 'text-primary bg-primary/5 rounded-md' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-md' }} uppercase tracking-widest text-sm">
+                    Riwayat Pesanan
                 </a>
                 <a href="{{ route('admin.return.index') }}" class="block px-4 py-3 font-light transition-colors {{ request()->routeIs('admin.return.*') ? 'text-primary bg-primary/5 rounded-md' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-md' }} uppercase tracking-widest text-sm">
                     Pengembalian & QC
                 </a>
                 <a href="{{ route('admin.katalog.index') }}" class="block px-4 py-3 font-light transition-colors {{ request()->routeIs('admin.katalog.*') ? 'text-primary bg-primary/5 rounded-md' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-md' }} uppercase tracking-widest text-sm">
                     Manajemen Katalog
+                </a>
+                <a href="{{ route('admin.kiosk.index') }}" class="block px-4 py-3 font-light transition-colors {{ request()->routeIs('admin.kiosk.*') ? 'text-primary bg-primary/5 rounded-md' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-md' }} uppercase tracking-widest text-sm">
+                    Kiosk RFID
                 </a>
                 <a href="{{ route('admin.users.index') }}" class="block px-4 py-3 font-light transition-colors {{ request()->routeIs('admin.users.*') ? 'text-primary bg-primary/5 rounded-md' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-md' }} uppercase tracking-widest text-sm">
                     Data Pelanggan
@@ -80,8 +86,7 @@
             <!-- Scrollable Content Area -->
             <main class="flex-1 overflow-y-auto p-6 md:p-10 bg-white relative">
                 <!-- Dot Pattern Background Overlay for style -->
-                <div class="absolute inset-0 z-0 opacity-20 pointer-events-none" style="background-image: radial-gradient(#111827 1px, transparent 1px); background-size: 20px 20px;"></div>
-                <div class="relative z-10">
+                <div class="relative">
                     {{ $slot }}
                 </div>
             </main>

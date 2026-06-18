@@ -4,7 +4,7 @@
     <div class="space-y-6">
         
         <div class="flex justify-between items-center">
-            <a href="{{ route('admin.katalog.create') }}" class="bg-primary text-gray-900 font-bold px-6 py-2 rounded-sm shadow-sm hover:bg-[#E5A5B0] transition-colors">
+            <a href="{{ route('admin.katalog.create') }}" class="bg-light-primary text-gray-900 font-bold px-6 py-2 rounded-sm shadow-sm hover:bg-[#E5A5B0] transition-colors">
                 + Tambah Kostum Baru
             </a>
         </div>

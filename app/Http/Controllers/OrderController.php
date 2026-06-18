@@ -35,7 +35,9 @@ class OrderController extends Controller
     public function returnShipping(\Illuminate\Http\Request $request, int $id)
     {
         $request->validate([
+            'return_shipping_courier' => 'required|string|max:255',
             'return_shipping_receipt' => 'required|string|max:255',
+            'return_shipping_image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
         $booking = \App\Models\Booking::findOrFail($id);
@@ -47,9 +49,13 @@ class OrderController extends Controller
             return back()->with('error', 'Status pesanan tidak valid untuk dikembalikan.');
         }
 
+        $imagePath = $request->file('return_shipping_image')->store('return_shipping_proofs', 'public');
+
         $booking->update([
             'status' => 'Dikirim Kembali',
+            'return_shipping_courier' => $request->return_shipping_courier,
             'return_shipping_receipt' => $request->return_shipping_receipt,
+            'return_shipping_image_path' => $imagePath,
         ]);
 
         return back()->with('success', 'Berhasil: Informasi resi pengiriman kembali telah disimpan. Terima kasih!');

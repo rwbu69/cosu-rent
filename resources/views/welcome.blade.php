@@ -1,26 +1,28 @@
 <x-layout.public>
     <!-- Nihilist Hero Section -->
     <section class="relative flex items-center justify-start min-h-[600px] md:min-h-[750px] bg-black">
-        
+
         <!-- Background Image with High Opacity & Desaturation -->
         <div class="absolute inset-0">
-            <img src="{{ asset('hero.jpg') }}" alt="Hero Background" class="object-cover object-top w-full h-full opacity-30 grayscale filter">
+            <img src="{{ asset('hero.jpg') }}" alt="Hero Background"
+                class="object-cover object-top w-full h-full opacity-30">
         </div>
 
         <!-- Text Content on Top -->
         <div class="relative z-10 w-full px-4 py-16 mx-auto max-w-7xl sm:px-6 lg:px-8">
-            <div class="max-w-4xl">
+            <div class="max-w-4xl" data-aos="fade-up">
                 <h1 class="mb-6 text-5xl font-light leading-tight text-white md:text-7xl lg:text-8xl">
                     Sewa <br />
                     Kostum <br />
                     <span class="font-semibold text-primary">Impianmu<span class="text-secondary">.</span></span>
                 </h1>
-                <p class="max-w-2xl mb-12 text-lg font-light text-gray-400 md:text-xl border-l border-secondary pl-6">
-                    Platform sewa kostum cosplay terpercaya. Pilih online, ambil super cepat via RFID, tampil maksimal di event tanpa ribet.
+                <p class="max-w-2xl pl-6 mb-12 text-lg font-light text-gray-400 border-l md:text-xl border-secondary">
+                    Platform sewa kostum cosplay terpercaya. Pilih online, ambil super cepat via RFID, tampil maksimal
+                    di event tanpa ribet.
                 </p>
                 <div class="flex flex-col gap-4 sm:flex-row">
                     <a href="{{ route('catalog.index') }}"
-                        class="px-10 py-4 text-sm tracking-widest text-center text-white transition-all bg-primary hover:bg-opacity-80">
+                        class="px-10 py-4 text-sm tracking-widest text-center text-white transition-all bg-light-primary hover:bg-opacity-80">
                         JELAJAHI KATALOG
                     </a>
                     <a href="#cara-sewa"
@@ -35,10 +37,10 @@
     <!-- Minimalist Featured Collection -->
     <section class="py-24 bg-white">
         <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-            <div class="flex flex-col items-start justify-between mb-16 md:flex-row md:items-end">
+            <div class="flex flex-col items-start justify-between mb-16 md:flex-row md:items-end" data-aos="fade-up">
                 <div>
-                    <h2 class="text-3xl font-light text-black">Koleksi Terpopuler</h2>
-                    <p class="mt-2 text-sm text-gray-500">Kostum pilihan terbaik minggu ini.</p>
+                    <h2 class="text-3xl font-light text-black">Koleksi Kami</h2>
+                    <p class="mt-2 text-sm text-gray-500">Kostum cosplay yang tersedia.</p>
                 </div>
                 <a href="{{ route('catalog.index') }}"
                     class="hidden pb-1 mt-4 text-sm tracking-wider text-gray-500 transition-colors border-b border-transparent md:inline-block hover:border-gray-500 hover:text-black md:mt-0">
@@ -48,26 +50,42 @@
 
             <div class="grid grid-cols-1 gap-12 md:grid-cols-3">
                 @foreach ($featured as $index => $costume)
-                    <!-- Clean, borderless cards -->
-                    <div class="group flex flex-col relative">
-                        <div class="relative overflow-hidden bg-gray-100 aspect-[3/4] mb-6">
+                    <!-- Professional Card Design -->
+                    <div data-aos="fade-up" data-aos-delay="{{ $index * 100 }}"
+                        class="relative flex flex-col overflow-hidden transition-transform duration-300 ease-out bg-white border border-gray-200 rounded-sm group hover:shadow-xl hover:-translate-y-2 transform-gpu">
+                        <div class="relative overflow-hidden bg-gray-100 aspect-[4/5]">
                             @if ($costume->image_path)
                                 <img src="{{ asset('storage/' . $costume->image_path) }}" alt="{{ $costume->name }}"
-                                    class="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105 grayscale group-hover:grayscale-0">
+                                    class="object-cover w-full h-full transition-transform duration-700 ease-out transform-gpu will-change-transform group-hover:scale-105">
                             @else
-                                <div class="flex items-center justify-center w-full h-full text-xs font-light tracking-widest text-gray-400">NO IMAGE</div>
+                                <div
+                                    class="flex items-center justify-center w-full h-full text-xs font-light tracking-widest text-gray-400">
+                                    NO IMAGE</div>
                             @endif
-                        </div>
-                        <div class="flex flex-col flex-grow">
-                            <div class="flex justify-between items-start mb-2">
-                                <h3 class="text-lg font-medium text-gray-900">{{ $costume->name }}</h3>
-                                <span class="text-sm font-semibold text-primary">Rp {{ number_format($costume->base_price, 0, ',', '.') }}</span>
+                            <!-- Hover Overlay -->
+                            <div
+                                class="absolute inset-0 transition-opacity duration-300 ease-out opacity-0 pointer-events-none bg-gradient-to-t from-gray-900/80 via-gray-900/10 to-transparent group-hover:opacity-100">
                             </div>
-                            <p class="mb-4 text-xs text-secondary uppercase tracking-widest">{{ $costume->series }}</p>
-                            <a href="{{ route('catalog.show', $costume->id) }}"
-                                class="inline-block mt-auto pb-1 text-sm text-gray-500 border-b border-gray-300 hover:text-primary hover:border-primary transition-colors self-start">
-                                Lihat Detail
-                            </a>
+                            <div
+                                class="absolute bottom-0 left-0 right-0 p-6 transition-all duration-300 ease-out translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transform-gpu">
+                                <a href="{{ route('catalog.show', $costume->id) }}"
+                                    class="block w-full py-3 text-sm font-bold tracking-widest text-center text-gray-900 uppercase transition-colors bg-white rounded-sm shadow-sm hover:bg-light-primary">
+                                    Lihat Detail
+                                </a>
+                            </div>
+                        </div>
+                        <div class="flex flex-col flex-grow p-6">
+                            <p class="mb-2 text-[10px] font-bold tracking-widest uppercase text-gray-400">
+                                {{ $costume->series }}</p>
+                            <h3 class="mb-4 text-lg font-extrabold text-gray-900 line-clamp-1"
+                                title="{{ $costume->name }}">{{ $costume->name }}</h3>
+                            <div class="flex flex-col items-end pt-4 mt-auto border-t border-gray-100">
+                                <div class="flex items-center justify-between w-full mb-1">
+                                    <span class="text-xs font-medium tracking-wider text-gray-500 uppercase">Sewa</span>
+                                    <span class="text-base font-extrabold text-primary">Rp {{ number_format($costume->base_price, 0, ',', '.') }}</span>
+                                </div>
+                                <span class="text-[10px] text-gray-400 font-medium italic">*Belum termasuk ongkir</span>
+                            </div>
                         </div>
                     </div>
                 @endforeach

@@ -47,7 +47,7 @@
                         <input type="number" x-model="reg.costume_id" required class="w-full border-gray-300 rounded-sm p-2 focus:ring-0 focus:border-primary shadow-sm text-sm">
                     </div>
                     <div class="pt-2">
-                        <button type="submit" class="bg-primary text-gray-900 font-bold py-2 px-6 rounded-sm shadow-sm hover:bg-[#E5A5B0] transition-colors">
+                        <button type="submit" class="bg-light-primary text-gray-900 font-bold py-2 px-6 rounded-sm shadow-sm hover:bg-[#E5A5B0] transition-colors">
                             Register Component
                         </button>
                     </div>

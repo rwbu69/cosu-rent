@@ -16,8 +16,9 @@ export default {
             },
             colors: {
                 white: '#FFFFFF',
-                primary: '#FF2E63', // Vibrant Pink
-                secondary: '#08D9D6', // Bright Tosca
+                primary: '#FF2E63',
+                secondary: '#08D9D6',
+                'light-primary': '#EDBCC3',
             }
         },
     },

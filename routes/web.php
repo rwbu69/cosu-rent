@@ -41,19 +41,23 @@ Route::middleware('auth')->group(function () {
     Route::post('/orders/{id}/received', [OrderController::class, 'received'])->name('orders.received');
     Route::post('/orders/{id}/return', [OrderController::class, 'returnShipping'])->name('orders.returnShipping');
 
-    // Alamat
-    Route::get('/profil/alamat', [UserAddressController::class, 'index'])->name('address.index');
-    Route::post('/profil/alamat', [UserAddressController::class, 'store'])->name('address.store');
-    Route::delete('/profil/alamat/{id}', [UserAddressController::class, 'destroy'])->name('address.destroy');
-    Route::patch('/profil/alamat/{id}/primary', [UserAddressController::class, 'setPrimary'])->name('address.primary');
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/profile/address', [UserAddressController::class, 'index'])->name('address.index');
+        Route::post('/profile/address', [UserAddressController::class, 'store'])->name('address.store');
+        Route::get('/profile/address/search-village', [UserAddressController::class, 'searchVillage'])->name('address.search-village');
+        Route::patch('/profile/address/{address}/primary', [UserAddressController::class, 'makePrimary'])->name('address.primary');
+        Route::delete('/profile/address/{address}', [UserAddressController::class, 'destroy'])->name('address.destroy');
+    });
 
     // Cart
     Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
     Route::delete('/cart/{cartItem}', [CartController::class, 'destroy'])->name('cart.destroy');
 
-    // Checkout flow
-    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
-    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+        Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+        Route::get('/checkout/shipping-options', [CheckoutController::class, 'getShippingOptions'])->name('checkout.shipping-options');
+    });
 
     // Phase 4 Admin Routes
     Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
@@ -62,10 +66,13 @@ Route::middleware('auth')->group(function () {
 
         Route::get('/rfid-kiosk', [KioskController::class, 'index'])->name('kiosk.index');
         Route::post('/rfid-kiosk/scan', [KioskController::class, 'scan'])->name('kiosk.scan');
+        Route::post('/rfid-kiosk/register', [KioskController::class, 'register'])->name('kiosk.register');
 
         // Phase 4 Admin Features
         Route::get('/bookings', [AdminBookingController::class, 'index'])->name('bookings.index');
+        Route::get('/bookings/history', [AdminBookingController::class, 'history'])->name('bookings.history');
         Route::post('/bookings/{booking}/confirm', [AdminBookingController::class, 'confirm'])->name('bookings.confirm');
+        Route::post('/bookings/{booking}/fee', [AdminBookingController::class, 'updateFee'])->name('bookings.fee');
         Route::post('/bookings/{booking}/ship', [AdminBookingController::class, 'ship'])->name('bookings.ship');
 
         Route::get('/laporan', [AdminReportController::class, 'index'])->name('report.index');

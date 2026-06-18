@@ -8,16 +8,51 @@
         <!-- Tambah Alamat Form -->
         <div class="bg-white p-8 border border-gray-200 rounded-sm shadow-sm">
             <h3 class="text-xl font-bold mb-4 text-gray-900">Tambah Alamat Baru</h3>
-            <form action="{{ route('address.store') }}" method="POST">
+            <form action="{{ route('address.store') }}" method="POST" x-data="addressForm()">
                 @csrf
                 <div class="mb-4">
-                    <label for="address_line" class="block font-medium mb-2 text-gray-700">Alamat Lengkap (termasuk Kota & Kode Pos)</label>
-                    <textarea name="address_line" id="address_line" rows="3" required class="w-full border-gray-300 rounded-sm p-3 focus:ring-0 focus:border-primary shadow-sm" placeholder="Contoh: Jl. Sudirman No. 1, Jakarta Pusat, 10110">{{ old('address_line') }}</textarea>
+                    <label for="address_line" class="block font-medium mb-2 text-gray-700">Alamat Lengkap</label>
+                    <textarea name="address_line" id="address_line" rows="3" required x-model="addressLine" @input.debounce.1000ms="searchVillage" class="w-full border-gray-300 rounded-sm p-3 focus:ring-0 focus:border-primary shadow-sm" placeholder="Contoh: Jl. Sudirman No. 1, Jakarta Pusat">{{ old('address_line') }}</textarea>
+                    <p class="text-xs text-gray-500 mt-1">Sistem akan otomatis mencari Kode Desa setelah Anda selesai mengetik.</p>
                     @error('address_line')
                         <p class="text-red-600 font-medium mt-2 text-sm">{{ $message }}</p>
                     @enderror
                 </div>
-                <button type="submit" class="bg-primary text-gray-900 font-bold px-6 py-2.5 rounded-sm shadow-sm hover:bg-[#E5A5B0] transition-colors">
+                <div class="mb-4">
+                    <label for="village_code" class="block font-medium mb-2 text-gray-700">Kode Desa (10 Digit)</label>
+                    <div class="flex gap-2 mb-2">
+                        <input type="text" name="village_code" id="village_code" required x-model="villageCode" class="w-full border-gray-300 rounded-sm p-3 focus:ring-0 focus:border-primary shadow-sm bg-gray-50" readonly placeholder="Otomatis terisi dari pencarian">
+                    </div>
+                    
+                    <!-- Search Results -->
+                    <div x-show="isSearching" class="text-sm text-primary font-medium mb-2 animate-pulse">Sedang mencari data desa...</div>
+                    <div x-show="searchError" class="text-sm text-red-600 font-medium mb-2" x-text="searchError"></div>
+                    
+                    <div x-show="searchResults.length > 0" class="border border-gray-200 rounded-sm max-h-60 overflow-y-auto mb-2 bg-white shadow-sm">
+                        <template x-for="result in searchResults" :key="result.village_code">
+                            <div class="p-3 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors" @click="selectVillage(result)">
+                                <p class="text-sm font-bold text-gray-800" x-text="result.village"></p>
+                                <p class="text-xs text-gray-500" x-text="result.district + ', ' + result.city + ', ' + result.province + ' (' + result.postal_code + ')'"></p>
+                            </div>
+                        </template>
+                    </div>
+
+                    <div x-show="searchResults.length === 0 && !isSearching && addressLine.length > 5 && !villageCode" class="text-xs text-gray-500 italic mb-2">
+                        Tidak ditemukan desa yang cocok. Coba perjelas nama desa/kecamatan pada alamat.
+                    </div>
+                    
+                    @error('village_code')
+                        <p class="text-red-600 font-medium mt-2 text-sm">{{ $message }}</p>
+                    @enderror
+                </div>
+                <div class="mb-6">
+                    <label for="postal_code" class="block font-medium mb-2 text-gray-700">Kode Pos</label>
+                    <input type="text" name="postal_code" id="postal_code" required class="w-full border-gray-300 rounded-sm p-3 focus:ring-0 focus:border-primary shadow-sm" placeholder="Contoh: 12210" value="{{ old('postal_code') }}">
+                    @error('postal_code')
+                        <p class="text-red-600 font-medium mt-2 text-sm">{{ $message }}</p>
+                    @enderror
+                </div>
+                <button type="submit" class="bg-light-primary text-gray-900 font-bold px-6 py-2.5 rounded-sm shadow-sm hover:bg-[#E5A5B0] transition-colors">
                     Simpan Alamat
                 </button>
             </form>
@@ -66,4 +101,50 @@
         </div>
 
     </div>
+
+    <script>
+        function addressForm() {
+            return {
+                addressLine: '{{ old('address_line') }}',
+                villageCode: '{{ old('village_code') }}',
+                searchResults: [],
+                isSearching: false,
+                searchError: '',
+
+                searchVillage() {
+                    if (this.addressLine.length < 5) {
+                        this.searchResults = [];
+                        return;
+                    }
+
+                    this.isSearching = true;
+                    this.searchError = '';
+
+                    fetch(`{{ route('address.search-village') }}?q=${encodeURIComponent(this.addressLine)}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            this.isSearching = false;
+                            if (data.error) {
+                                this.searchError = data.error;
+                            } else if (data.results) {
+                                this.searchResults = data.results;
+                                if (data.results.length === 1) {
+                                    this.selectVillage(data.results[0]);
+                                }
+                            }
+                        })
+                        .catch(error => {
+                            this.isSearching = false;
+                            this.searchError = 'Gagal terhubung ke server pencarian.';
+                        });
+                },
+
+                selectVillage(result) {
+                    this.villageCode = result.village_code;
+                    // Do not auto-fill postal code, user must input it manually
+                    this.searchResults = [];
+                }
+            }
+        }
+    </script>
 </x-layout.public>

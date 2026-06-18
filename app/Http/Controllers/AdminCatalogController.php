@@ -24,7 +24,7 @@ class AdminCatalogController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:costumes,name',
             'series' => 'required|string|max:255',
             'size' => 'required|string|max:50',
             'base_price' => 'required|numeric|min:0',
@@ -40,6 +40,7 @@ class AdminCatalogController extends Controller
         DB::beginTransaction();
         try {
             $data = $request->only('name', 'series', 'size', 'base_price', 'deposit_price', 'description');
+            $data['is_available'] = $request->has('is_available');
             
             if ($request->hasFile('image')) {
                 $data['image_path'] = $request->file('image')->store('costumes', 'public');
@@ -77,7 +78,7 @@ class AdminCatalogController extends Controller
     public function update(Request $request, Costume $katalog)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255|unique:costumes,name,' . $katalog->id,
             'series' => 'required|string|max:255',
             'size' => 'required|string|max:50',
             'base_price' => 'required|numeric|min:0',
@@ -94,6 +95,7 @@ class AdminCatalogController extends Controller
         DB::beginTransaction();
         try {
             $data = $request->only('name', 'series', 'size', 'base_price', 'deposit_price', 'description');
+            $data['is_available'] = $request->has('is_available');
             
             if ($request->hasFile('image')) {
                 $data['image_path'] = $request->file('image')->store('costumes', 'public');

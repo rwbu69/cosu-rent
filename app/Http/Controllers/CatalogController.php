@@ -9,7 +9,7 @@ class CatalogController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Costume::query();
+        $query = Costume::query()->where('is_available', true);
 
         if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->search . '%')

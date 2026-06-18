@@ -21,7 +21,7 @@
         </div>
 
         <div class="flex items-center gap-4 pt-4 border-t-2 border-gray-900">
-            <button class="bg-gray-900 text-white font-bold px-8 py-3 border border-gray-200 rounded-md hover:bg-primary hover:text-gray-900 transition-colors uppercase">
+            <button class="bg-gray-900 text-white font-bold px-8 py-3 border border-gray-200 rounded-md hover:bg-light-primary hover:text-gray-900 transition-colors uppercase">
                 Perbarui Kata Sandi
             </button>
 

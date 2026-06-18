@@ -102,7 +102,7 @@
                 </div>
 
                 <button type="submit" class="w-full font-bold text-base py-3 rounded-sm transition-colors shadow-sm"
-                        :class="isReadyToSubmit ? 'bg-primary text-gray-900 hover:bg-[#E5A5B0] cursor-pointer' : 'bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed'"
+                        :class="isReadyToSubmit ? 'bg-light-primary text-gray-900 hover:bg-[#E5A5B0] cursor-pointer' : 'bg-gray-100 text-gray-400 border border-gray-200 cursor-not-allowed'"
                         :disabled="!isReadyToSubmit"
                         @click="if(!isReadyToSubmit) { $dispatch('toast', { message: 'Selesaikan QC terlebih dahulu! Pastikan semua discan atau ditandai hilang.', type: 'error' }); event.preventDefault(); }">
                     Selesaikan Pengembalian (Selesai)

@@ -10,6 +10,12 @@ class AdminDashboardController extends Controller
 {
     public function index()
     {
+        // 0. Pesanan Masuk (Menunggu Konfirmasi / Diproses)
+        $incomingBookings = Booking::with(['user', 'costume'])
+            ->whereIn('status', ['Menunggu Konfirmasi', 'Diproses'])
+            ->latest()
+            ->get();
+
         // 1. Sedang Dirental
         $activeBookings = Booking::with(['user', 'costume.components'])
             ->where('status', 'Sedang Dirental')
@@ -18,7 +24,7 @@ class AdminDashboardController extends Controller
 
         // 2. Dikirim ke Customer
         $shippingOut = Booking::with(['user', 'costume'])
-            ->where('status', 'Dikirim ke Customer')
+            ->where('status', 'Sedang Dikirim')
             ->latest()
             ->get();
 
@@ -39,6 +45,7 @@ class AdminDashboardController extends Controller
         })->get();
 
         return view('admin.dashboard', compact(
+            'incomingBookings',
             'activeBookings',
             'shippingOut',
             'shippingReturn',

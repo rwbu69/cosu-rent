@@ -80,6 +80,37 @@
                     @endif
                     @error('address_id')<p class="text-red-600 font-semibold mt-1 text-sm">{{ $message }}</p>@enderror
                 </div>
+
+                <!-- Opsi Pengiriman -->
+                <div class="bg-white border border-gray-200 rounded-sm shadow-sm p-6" x-show="selectedAddress" x-cloak>
+                    <h3 class="text-lg font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">Opsi Pengiriman</h3>
+                    
+                    <div x-show="isShippingLoading" class="text-gray-500 font-medium text-sm animate-pulse">
+                        Menghitung ongkos kirim...
+                    </div>
+                    
+                    <div x-show="shippingError" class="bg-yellow-50 border border-yellow-200 p-4 rounded-sm text-sm text-yellow-800 font-medium">
+                        <p x-text="shippingError"></p>
+                        <p class="mt-2 text-xs opacity-80">Anda tetap bisa melanjutkan pesanan, namun status akan menjadi "Menunggu Hitung Ongkir".</p>
+                    </div>
+
+                    <div x-show="shippingOptions.length > 0" class="space-y-3">
+                        <template x-for="(option, index) in shippingOptions" :key="index">
+                            <label class="flex items-start gap-3 p-3 rounded-sm border cursor-pointer transition-all duration-200"
+                                   :class="shippingCourier == option.courier_code ? 'border-primary bg-primary bg-opacity-10 shadow-sm' : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'">
+                                <input type="radio" name="shipping_courier" :value="option.courier_code" x-model="shippingCourier" @change="shippingFee = option.price" class="mt-1 text-primary focus:ring-primary border-gray-300">
+                                <div class="flex-grow flex justify-between items-center">
+                                    <div>
+                                        <p class="text-sm font-bold text-gray-800" x-text="option.courier_name"></p>
+                                        <p class="text-[10px] font-medium text-gray-500 mt-0.5" x-text="'Estimasi: ' + (option.estimation ? option.estimation : '-')"></p>
+                                    </div>
+                                    <span class="font-extrabold text-primary" x-text="'Rp ' + new Intl.NumberFormat('id-ID').format(option.price)"></span>
+                                </div>
+                            </label>
+                        </template>
+                    </div>
+                    <input type="hidden" name="shipping_fee" :value="shippingFee">
+                </div>
             </div>
 
             <!-- Kanan: Bukti Pembayaran & Rincian Harga -->
@@ -89,8 +120,9 @@
                     <h3 class="text-lg font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">Bukti Pembayaran</h3>
                     <p class="text-sm text-gray-600 mb-4 font-medium leading-relaxed">Silakan transfer sesuai Total Biaya ke Rekening <strong>BCA 1234567890</strong> a.n. Cosplay Rental, lalu unggah bukti pembayarannya.</p>
                     
-                    <input type="file" name="payment_proof" accept="image/png, image/jpeg, image/jpg" required class="w-full border border-gray-300 rounded-sm p-2 focus:ring-0 text-sm font-medium bg-gray-50 text-gray-700 file:mr-4 file:py-1.5 file:px-4 file:rounded-sm file:border-0 file:text-xs file:font-bold file:bg-primary file:text-gray-900 hover:file:bg-[#E5A5B0]">
+                    <input type="file" name="payment_proof" accept="image/png, image/jpeg, image/jpg" :required="shippingFee > 0" class="w-full border border-gray-300 rounded-sm p-2 focus:ring-0 text-sm font-medium bg-gray-50 text-gray-700 file:mr-4 file:py-1.5 file:px-4 file:rounded-sm file:border-0 file:text-xs file:font-bold file:bg-primary file:text-gray-900 hover:file:bg-[#E5A5B0]">
                     <p class="text-xs text-gray-400 mt-2 font-medium">Format: JPG/PNG, Maksimal: 2MB.</p>
+                    <p class="text-xs text-yellow-600 mt-1 font-bold" x-show="shippingFee === 0 && !isShippingLoading">Abaikan unggah bukti bayar, admin akan mengonfirmasi via sistem.</p>
                     @error('payment_proof')<p class="text-red-600 font-semibold mt-1 text-sm">{{ $message }}</p>@enderror
                 </div>
 
@@ -107,9 +139,13 @@
                                 <span>Total Uang Jaminan (Deposit) <br><span class="text-xs text-gray-400 font-normal">Dikembalikan setelah QC Return selesai</span></span>
                                 <span class="font-semibold text-gray-900">Rp {{ number_format($totalDeposit, 0, ',', '.') }}</span>
                             </div>
+                            <div class="flex justify-between text-gray-600 font-medium pt-3" x-show="shippingFee > 0">
+                                <span>Ongkos Kirim</span>
+                                <span class="font-semibold text-gray-900" x-text="'Rp ' + new Intl.NumberFormat('id-ID').format(shippingFee)"></span>
+                            </div>
                             <div class="flex justify-between items-center pt-4 mt-2">
                                 <span class="text-base font-bold text-gray-900">Total Pembayaran</span>
-                                <span class="text-xl font-extrabold text-primary">Rp {{ number_format($totalPrice, 0, ',', '.') }}</span>
+                                <span class="text-xl font-extrabold text-primary" x-text="'Rp ' + new Intl.NumberFormat('id-ID').format({{ $totalPrice }} + shippingFee)"></span>
                             </div>
                         </div>
 
@@ -123,7 +159,7 @@
                             </span>
                         </label>
 
-                        <button type="submit" class="w-full bg-primary text-gray-900 font-bold text-base py-3.5 rounded-sm shadow-sm hover:bg-[#E5A5B0] transition-colors" :disabled="!selectedAddress" :class="{'opacity-50 cursor-not-allowed': !selectedAddress}">
+                        <button type="submit" class="w-full bg-light-primary text-gray-900 font-bold text-base py-3.5 rounded-sm shadow-sm hover:bg-[#E5A5B0] transition-colors" :disabled="!selectedAddress" :class="{'opacity-50 cursor-not-allowed': !selectedAddress}">
                             Kirim & Konfirmasi Penyewaan Semua Item
                         </button>
                     </div>
@@ -136,6 +172,51 @@
         function checkoutForm() {
             return {
                 selectedAddress: '{{ $addresses->where('is_primary', true)->first()?->id ?? '' }}',
+                shippingOptions: [],
+                shippingCourier: '',
+                shippingFee: 0,
+                isShippingLoading: false,
+                shippingError: '',
+                
+                init() {
+                    if (this.selectedAddress) {
+                        this.fetchShipping();
+                    }
+                    this.$watch('selectedAddress', value => {
+                        this.fetchShipping();
+                    });
+                },
+                
+                fetchShipping() {
+                    if (!this.selectedAddress) return;
+                    
+                    this.isShippingLoading = true;
+                    this.shippingError = '';
+                    this.shippingOptions = [];
+                    this.shippingCourier = '';
+                    this.shippingFee = 0;
+
+                    fetch(`{{ route('checkout.shipping-options') }}?address_id=${this.selectedAddress}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            this.isShippingLoading = false;
+                            if (data.error) {
+                                this.shippingError = data.error;
+                            } else if (data.options) {
+                                this.shippingOptions = data.options;
+                                if (this.shippingOptions.length > 0) {
+                                    this.shippingCourier = this.shippingOptions[0].courier_code;
+                                    this.shippingFee = this.shippingOptions[0].price;
+                                } else {
+                                    this.shippingError = 'Tidak ada kurir yang tersedia untuk rute ini.';
+                                }
+                            }
+                        })
+                        .catch(error => {
+                            this.isShippingLoading = false;
+                            this.shippingError = 'Gagal menghubungi server ongkir.';
+                        });
+                }
             }
         }
     </script>

@@ -4,7 +4,7 @@
 
     <div class="flex flex-col items-center mb-8 text-center">
         <img src="{{ asset('icon.svg') }}" alt="Logo" class="w-16 h-16 mb-4">
-        <h2 class="text-2xl font-medium tracking-wide text-gray-900 uppercase">Login</h2>
+        <h2 class="text-2xl font-medium tracking-wide text-gray-900 uppercase">Masuk</h2>
     </div>
 
     <form method="POST" action="{{ route('login') }}">
@@ -14,7 +14,7 @@
         <div class="relative">
             <input id="username"
                 class="block w-full bg-[#f0f0f0] shadow-inner border-0 rounded-full px-5 py-3.5 text-sm text-gray-700 placeholder-gray-400 focus:ring-2 focus:ring-primary focus:outline-none transition-shadow"
-                type="text" name="username" :value="old('username')" placeholder="username" required autofocus
+                type="text" name="username" value="{{ old('username') }}" placeholder="username" required autofocus
                 autocomplete="username" />
             <div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
                 <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -45,14 +45,14 @@
             <label for="remember_me" class="inline-flex items-center cursor-pointer">
                 <input id="remember_me" type="checkbox"
                     class="border-gray-300 rounded-full shadow-sm text-primary focus:ring-primary" name="remember">
-                <span class="text-xs font-medium text-gray-400 ms-2">{{ __('Remember me') }}</span>
+                <span class="text-xs font-medium text-gray-400 ms-2">{{ __('Ingat Saya') }}</span>
             </label>
         </div>
 
         <div class="mt-8 text-center">
             <button type="submit"
-                class="w-3/4 mx-auto bg-primary hover:bg-[#E5A5B0] text-gray-900 rounded-full py-3 px-4 font-bold text-sm tracking-widest uppercase transition-colors shadow-sm">
-                {{ __('Log in') }}
+                class="w-3/4 mx-auto bg-light-primary hover:bg-[#E5A5B0] text-gray-900 rounded-full py-3 px-4 font-bold text-sm tracking-widest uppercase transition-colors shadow-sm">
+                {{ __('Masuk') }}
             </button>
         </div>
 
@@ -60,7 +60,7 @@
             @if (Route::has('password.request'))
                 <a class="text-xs text-gray-400 transition-colors hover:text-gray-600"
                     href="{{ route('password.request') }}">
-                    {{ __('Forgot Password?') }}
+                    {{ __('Lupa Password?') }}
                 </a>
             @endif
         </div>

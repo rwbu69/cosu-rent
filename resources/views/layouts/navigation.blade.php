@@ -66,7 +66,7 @@
                 @else
                     <div class="space-x-4">
                         <a href="{{ route('login') }}" class="font-bold text-gray-900 hover:underline">Masuk</a>
-                        <a href="{{ route('register') }}" class="inline-block bg-primary text-gray-900 font-extrabold px-4 py-2 border border-gray-200 rounded-md shadow-sm hover:-translate-y-1 hover:shadow-sm transition-all">Daftar</a>
+                        <a href="{{ route('register') }}" class="inline-block bg-light-primary text-gray-900 font-extrabold px-4 py-2 border border-gray-200 rounded-md shadow-sm hover:-translate-y-1 hover:shadow-sm transition-all">Daftar</a>
                     </div>
                 @endauth
             </div>

@@ -14,16 +14,22 @@ class Costume extends Model
     protected $fillable = [
         'name',
         'series',
-        'size',
+        'description',
         'base_price',
         'deposit_price',
-        'description',
+        'size',
+        'weight',
         'image_path',
+        'is_available',
+    ];
+
+    protected $casts = [
+        'is_available' => 'boolean',
     ];
 
     public function components()
     {
-        return $this->hasMany(CostumeComponent::class);
+        return $this->hasMany(CostumeComponent::class)->withTrashed();
     }
 
     public function bookings()

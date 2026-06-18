@@ -12,8 +12,8 @@
 
     <!-- Success Toast -->
     <template x-if="type === 'success'">
-        <div class="bg-primary text-gray-900 px-6 py-4 border border-gray-200 rounded-md font-bold shadow-none flex items-center gap-3">
-            <svg class="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        <div class="bg-green-100 text-green-900 px-6 py-4 border border-green-500 rounded-md font-bold shadow-none flex items-center gap-3">
+            <svg class="w-6 h-6 text-green-900" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="square" stroke-linejoin="miter" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
             <span x-text="message"></span>
         </div>
     </template>

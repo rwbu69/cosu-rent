@@ -9,6 +9,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="flex flex-col min-h-screen font-sans antialiased text-gray-800 bg-white">
@@ -19,7 +20,7 @@
                 <div class="flex justify-between h-16 relative">
                     <!-- Left: Logo & Brand -->
                     <div class="flex items-center">
-                        <a href="{{ route('catalog.index') }}" class="flex items-center gap-3">
+                        <a href="{{ url('/') }}" class="flex items-center gap-3">
                             <img src="{{ asset('icon.svg') }}" alt="Logo" class="w-auto h-8">
                             <span class="hidden text-xl font-light tracking-widest text-gray-900 sm:block uppercase">CosuRent</span>
                         </a>
@@ -27,7 +28,10 @@
 
                     <!-- Center: Navigation Links -->
                     <div class="hidden md:flex absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 space-x-8">
-                        <a href="{{ route('catalog.index') }}" class="inline-flex items-center px-1 pt-1 border-b-2 font-medium leading-5 transition duration-150 ease-in-out {{ request()->routeIs('catalog.*') || request()->is('/') ? 'border-primary text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                        <a href="{{ url('/') }}" class="inline-flex items-center px-1 pt-1 border-b-2 font-medium leading-5 transition duration-150 ease-in-out {{ request()->is('/') ? 'border-primary text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
+                            Beranda
+                        </a>
+                        <a href="{{ route('catalog.index') }}" class="inline-flex items-center px-1 pt-1 border-b-2 font-medium leading-5 transition duration-150 ease-in-out {{ request()->routeIs('catalog.*') ? 'border-primary text-gray-900' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300' }}">
                             Katalog
                         </a>
                         @auth
@@ -106,6 +110,7 @@
             <!-- Mobile Menu -->
             <div :class="{'block': open, 'hidden': ! open}" class="hidden border-t border-gray-200 md:hidden">
                 <div class="pt-2 pb-3 space-y-1">
+                    <a href="{{ url('/') }}" class="block px-6 py-2 text-base font-medium {{ request()->is('/') ? 'text-primary bg-primary/10' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50' }}">Beranda</a>
                     <a href="{{ route('catalog.index') }}" class="block px-6 py-2 text-base font-medium {{ request()->routeIs('catalog.*') ? 'text-primary bg-primary/10' : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50' }}">Katalog</a>
                     @auth
                         @if(Auth::user()->role !== 'admin')
@@ -128,7 +133,7 @@
                         </form>
                     @else
                         <a href="{{ route('login') }}" class="block px-6 py-3 text-base font-bold text-gray-900 hover:bg-gray-50">Masuk</a>
-                        <a href="{{ route('register') }}" class="block px-6 py-3 text-base font-bold bg-gray-900 text-white hover:bg-primary hover:text-gray-900 transition-colors">Daftar</a>
+                        <a href="{{ route('register') }}" class="block px-6 py-3 text-base font-bold bg-gray-900 text-white hover:bg-light-primary hover:text-gray-900 transition-colors">Daftar</a>
                     @endauth
                 </div>
             </div>
@@ -143,5 +148,15 @@
 
         <x-modal-confirm />
         <x-toast />
+        
+        <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+        <script>
+            AOS.init({
+                once: true,
+                duration: 800,
+                easing: 'ease-out-cubic',
+                offset: 50,
+            });
+        </script>
     </body>
 </html>

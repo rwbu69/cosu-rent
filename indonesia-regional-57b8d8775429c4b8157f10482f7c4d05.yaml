@@ -1,0 +1,1432 @@
+openapi: 3.0.0
+info:
+  title: Api Regional Wilayah Indonesia
+  description: >-
+    Complete API collection for Indonesian regional data including provinces,
+    regencies, districts, villages, and postal codes.
+
+
+    ## Features
+
+    - Access to all Indonesian provinces, regencies, districts, and villages
+
+    - Hierarchical navigation (province → regency → district → village)
+
+    - Search across all regional types by name or postal code
+
+    - Postal code queries
+
+    - Name-based filtering
+
+    - Pagination support
+
+    - Premium endpoints for advanced search and postal code access
+
+
+    ## Authentication
+
+    All requests require an API key in the `x-api-co-id` header.
+
+
+    ## Premium Endpoints
+
+    The following endpoints require a premium subscription:
+
+    - `/regional/indonesia/search` - Advanced search by name or postal code
+
+    - `/regional/indonesia/postal-codes` - List all postal codes
+
+    - `/regional/indonesia/postal-codes/:postal_code` - Get villages by postal code
+
+
+    ## Base URL
+
+    ```
+
+    https://use.api.co.id/regional/indonesia
+
+    ```
+
+
+    ## Data Structure
+
+    - **Province** (Provinsi) - 34 provinces
+
+    - **Regency** (Kabupaten/Kota) - Cities and regencies
+
+    - **District** (Kecamatan) - Subdistricts
+
+    - **Village** (Kelurahan/Desa) - Villages and urban wards
+
+    - **Postal Code** (Kode Pos) - Postal codes linked to villages
+  version: 1.0.0
+servers:
+  - url: https://use.api.co.id
+tags:
+  - name: Provinces
+    description: Endpoints for accessing province data.
+  - name: Regencies
+    description: Endpoints for accessing regency/city data.
+  - name: Districts
+    description: Endpoints for accessing district data.
+  - name: Villages
+    description: Endpoints for accessing village data.
+  - name: Postal Codes (Premium)
+    description: Endpoints for accessing postal code data. All postal code endpoints require premium subscription.
+  - name: Search (Premium)
+    description: Endpoints for searching regional data. Search endpoint requires premium subscription.
+paths:
+  /regional/indonesia/provinces:
+    get:
+      tags:
+        - Provinces
+      summary: List All Provinces
+      description: >-
+        Get all provinces in Indonesia.
+
+
+        ### Query Parameters
+
+        - `name` (optional): Filter by province name (case-insensitive partial match)
+
+        - `page` (optional): Page number (default: 1)
+
+        - **Note:** Pagination size is fixed at 100 items per page and cannot be configured
+
+
+        ### Examples
+
+        ```bash
+        # Get all provinces
+        GET /regional/indonesia/provinces
+
+        # Search provinces by name
+        GET /regional/indonesia/provinces?name=jawa
+
+        # With pagination
+        GET /regional/indonesia/provinces?page=1
+        ```
+      parameters:
+        - name: x-api-co-id
+          in: header
+          schema:
+            type: string
+          description: Your API key for authentication
+          example: '{{api_key}}'
+        - name: name
+          in: query
+          schema:
+            type: string
+          required: false
+          description: Filter by province name (case-insensitive partial match)
+          example: jawa
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+          description: Page number
+          example: 1
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: Success - All Provinces
+                  value:
+                    is_success: true
+                    message: Success
+                    data:
+                      - code: '11'
+                        name: ACEH
+                      - code: '12'
+                        name: SUMATERA UTARA
+                      - code: '13'
+                        name: SUMATERA BARAT
+                    paging:
+                      page: 1
+                      size: 100
+                      total_item: 34
+                      total_page: 1
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                Missing API Key:
+                  summary: Missing API Key
+                  value:
+                    is_success: false
+                    message: 'Missing API key in x-api-co-id header'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              examples:
+                Rate Limit Exceeded:
+                  summary: Rate Limit Exceeded
+                  value:
+                    is_success: false
+                    message: 'Rate limit exceeded. Please try again later'
+  /regional/indonesia/provinces/{code}:
+    get:
+      tags:
+        - Provinces
+      summary: Get Province by Code
+      description: >-
+        Get a specific province by code, including all regencies in that province.
+
+
+        ### Path Parameters
+
+        - `code` (required): Province code (2 digits)
+
+
+        ### Examples
+
+        ```bash
+        # Get Aceh province (code 11)
+        GET /regional/indonesia/provinces/11
+
+        # Get Jakarta province (code 31)
+        GET /regional/indonesia/provinces/31
+        ```
+      parameters:
+        - name: x-api-co-id
+          in: header
+          schema:
+            type: string
+          description: Your API key for authentication
+          example: '{{api_key}}'
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Province code (2 digits)
+          example: '11'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: Success - Province with Regencies
+                  value:
+                    is_success: true
+                    message: Success
+                    data:
+                      code: '11'
+                      name: ACEH
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                Missing API Key:
+                  summary: Missing API Key
+                  value:
+                    is_success: false
+                    message: 'Missing API key in x-api-co-id header'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              examples:
+                Province Not Found:
+                  summary: Province Not Found
+                  value:
+                    is_success: false
+                    message: 'Province not found'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              examples:
+                Rate Limit Exceeded:
+                  summary: Rate Limit Exceeded
+                  value:
+                    is_success: false
+                    message: 'Rate limit exceeded. Please try again later'
+  /regional/indonesia/provinces/{code}/regencies:
+    get:
+      tags:
+        - Provinces
+      summary: Get Regencies in Province
+      description: |-
+        Get all regencies/cities in a specific province.
+
+        ### Path Parameters
+        - `code` (required): Province code
+
+        ### Query Parameters
+        - `name` (optional): Filter by regency name
+        - `page` (optional): Page number
+        - **Note:** Pagination size is fixed at 100 items per page and cannot be configured
+      parameters:
+        - name: x-api-co-id
+          in: header
+          schema:
+            type: string
+          description: Your API key for authentication
+          example: '{{api_key}}'
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Province code
+          example: '11'
+        - name: name
+          in: query
+          schema:
+            type: string
+          required: false
+          description: Filter by regency name (optional)
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+          description: Page number (optional)
+          example: 1
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: Success - Regencies in Province
+                  value:
+                    is_success: true
+                    message: Success
+                    data:
+                      - code: '1101'
+                        name: KABUPATEN SIMEULUE
+                        province_code: '11'
+                        province: ACEH
+                      - code: '1102'
+                        name: KABUPATEN ACEH SINGKIL
+                        province_code: '11'
+                        province: ACEH
+                    paging:
+                      page: 1
+                      size: 100
+                      total_item: 23
+                      total_page: 1
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                Missing API Key:
+                  summary: Missing API Key
+                  value:
+                    is_success: false
+                    message: 'Missing API key in x-api-co-id header'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              examples:
+                Province Not Found:
+                  summary: Province Not Found
+                  value:
+                    is_success: false
+                    message: 'Province not found'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              examples:
+                Rate Limit Exceeded:
+                  summary: Rate Limit Exceeded
+                  value:
+                    is_success: false
+                    message: 'Rate limit exceeded. Please try again later'
+  /regional/indonesia/regencies:
+    get:
+      tags:
+        - Regencies
+      summary: List All Regencies
+      description: |-
+        Get all regencies/cities in Indonesia.
+
+        ### Query Parameters
+        - `province_code` (optional): Filter by province code
+        - `name` (optional): Filter by regency name
+        - `page` (optional): Page number
+        - **Note:** Pagination size is fixed at 100 items per page and cannot be configured
+      parameters:
+        - name: x-api-co-id
+          in: header
+          schema:
+            type: string
+          description: Your API key for authentication
+          example: '{{api_key}}'
+        - name: province_code
+          in: query
+          schema:
+            type: string
+          required: false
+          description: Filter by province code (optional)
+        - name: name
+          in: query
+          schema:
+            type: string
+          required: false
+          description: Filter by regency name (optional)
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+          description: Page number (optional)
+          example: 1
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: Success - All Regencies
+                  value:
+                    is_success: true
+                    message: Success
+                    data:
+                      - code: '1101'
+                        name: KABUPATEN SIMEULUE
+                        province_code: '11'
+                        province: ACEH
+                      - code: '1102'
+                        name: KABUPATEN ACEH SINGKIL
+                        province_code: '11'
+                        province: ACEH
+                      - code: '1201'
+                        name: KABUPATEN TAPANULI TENGAH
+                        province_code: '12'
+                        province: SUMATERA UTARA
+                    paging:
+                      page: 1
+                      size: 100
+                      total_item: 514
+                      total_page: 6
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                Missing API Key:
+                  summary: Missing API Key
+                  value:
+                    is_success: false
+                    message: 'Missing API key in x-api-co-id header'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              examples:
+                Rate Limit Exceeded:
+                  summary: Rate Limit Exceeded
+                  value:
+                    is_success: false
+                    message: 'Rate limit exceeded. Please try again later'
+  /regional/indonesia/regencies/{code}:
+    get:
+      tags:
+        - Regencies
+      summary: Get Regency by Code
+      description: |-
+        Get a specific regency by code.
+
+        ### Path Parameters
+        - `code` (required): Regency code (4 digits)
+      parameters:
+        - name: x-api-co-id
+          in: header
+          schema:
+            type: string
+          description: Your API key for authentication
+          example: '{{api_key}}'
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Regency code (4 digits)
+          example: '1101'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: Success - Regency by Code
+                  value:
+                    is_success: true
+                    message: Success
+                    data:
+                      code: '1101'
+                      name: KABUPATEN SIMEULUE
+                      province_code: '11'
+                      province: ACEH
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                Missing API Key:
+                  summary: Missing API Key
+                  value:
+                    is_success: false
+                    message: 'Missing API key in x-api-co-id header'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              examples:
+                Regency Not Found:
+                  summary: Regency Not Found
+                  value:
+                    is_success: false
+                    message: 'Regency not found'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              examples:
+                Rate Limit Exceeded:
+                  summary: Rate Limit Exceeded
+                  value:
+                    is_success: false
+                    message: 'Rate limit exceeded. Please try again later'
+  /regional/indonesia/regencies/{code}/districts:
+    get:
+      tags:
+        - Regencies
+      summary: Get Districts in Regency
+      description: |-
+        Get all districts in a specific regency.
+
+        ### Path Parameters
+        - `code` (required): Regency code
+
+        ### Query Parameters
+        - `name` (optional): Filter by district name
+        - `page` (optional): Page number
+        - **Note:** Pagination size is fixed at 100 items per page and cannot be configured
+      parameters:
+        - name: x-api-co-id
+          in: header
+          schema:
+            type: string
+          description: Your API key for authentication
+          example: '{{api_key}}'
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Regency code
+          example: '1101'
+        - name: name
+          in: query
+          schema:
+            type: string
+          required: false
+          description: Filter by district name (optional)
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+          description: Page number (optional)
+          example: 1
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: Success - Districts in Regency
+                  value:
+                    is_success: true
+                    message: Success
+                    data:
+                      - code: '110101'
+                        name: TEUPAH SELATAN
+                        regency_code: '1101'
+                        regency: KABUPATEN SIMEULUE
+                        province_code: '11'
+                        province: ACEH
+                      - code: '110102'
+                        name: SIMEULUE TIMUR
+                        regency_code: '1101'
+                        regency: KABUPATEN SIMEULUE
+                        province_code: '11'
+                        province: ACEH
+                    paging:
+                      page: 1
+                      size: 100
+                      total_item: 10
+                      total_page: 1
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                Missing API Key:
+                  summary: Missing API Key
+                  value:
+                    is_success: false
+                    message: 'Missing API key in x-api-co-id header'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              examples:
+                Regency Not Found:
+                  summary: Regency Not Found
+                  value:
+                    is_success: false
+                    message: 'Regency not found'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              examples:
+                Rate Limit Exceeded:
+                  summary: Rate Limit Exceeded
+                  value:
+                    is_success: false
+                    message: 'Rate limit exceeded. Please try again later'
+  /regional/indonesia/districts:
+    get:
+      tags:
+        - Districts
+      summary: List All Districts
+      description: |-
+        Get all districts in Indonesia.
+
+        ### Query Parameters
+        - `regency_code` (optional): Filter by regency code
+        - `name` (optional): Filter by district name
+        - `page` (optional): Page number
+        - **Note:** Pagination size is fixed at 100 items per page and cannot be configured
+      parameters:
+        - name: x-api-co-id
+          in: header
+          schema:
+            type: string
+          description: Your API key for authentication
+          example: '{{api_key}}'
+        - name: regency_code
+          in: query
+          schema:
+            type: string
+          required: false
+          description: Filter by regency code (optional)
+        - name: name
+          in: query
+          schema:
+            type: string
+          required: false
+          description: Filter by district name (optional)
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+          description: Page number (optional)
+          example: 1
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: Success - All Districts
+                  value:
+                    is_success: true
+                    message: Success
+                    data:
+                      - code: '110101'
+                        name: TEUPAH SELATAN
+                        regency_code: '1101'
+                        regency: KABUPATEN SIMEULUE
+                        province_code: '11'
+                        province: ACEH
+                      - code: '110102'
+                        name: SIMEULUE TIMUR
+                        regency_code: '1101'
+                        regency: KABUPATEN SIMEULUE
+                        province_code: '11'
+                        province: ACEH
+                    paging:
+                      page: 1
+                      size: 100
+                      total_item: 7213
+                      total_page: 73
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                Missing API Key:
+                  summary: Missing API Key
+                  value:
+                    is_success: false
+                    message: 'Missing API key in x-api-co-id header'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              examples:
+                Rate Limit Exceeded:
+                  summary: Rate Limit Exceeded
+                  value:
+                    is_success: false
+                    message: 'Rate limit exceeded. Please try again later'
+  /regional/indonesia/districts/{code}:
+    get:
+      tags:
+        - Districts
+      summary: Get District by Code
+      description: >-
+        Get a specific district by code.
+
+
+        ### Path Parameters
+
+        - `code` (required): District code (6 digits)
+      parameters:
+        - name: x-api-co-id
+          in: header
+          schema:
+            type: string
+          description: Your API key for authentication
+          example: '{{api_key}}'
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: District code (6 digits)
+          example: '110101'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: Success - District by Code
+                  value:
+                    is_success: true
+                    message: Success
+                    data:
+                      code: '110101'
+                      name: TEUPAH SELATAN
+                      regency_code: '1101'
+                      regency: KABUPATEN SIMEULUE
+                      province_code: '11'
+                      province: ACEH
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                Missing API Key:
+                  summary: Missing API Key
+                  value:
+                    is_success: false
+                    message: 'Missing API key in x-api-co-id header'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              examples:
+                District Not Found:
+                  summary: District Not Found
+                  value:
+                    is_success: false
+                    message: 'District not found'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              examples:
+                Rate Limit Exceeded:
+                  summary: Rate Limit Exceeded
+                  value:
+                    is_success: false
+                    message: 'Rate limit exceeded. Please try again later'
+  /regional/indonesia/districts/{code}/villages:
+    get:
+      tags:
+        - Districts
+      summary: Get Villages in District
+      description: |-
+        Get all villages in a specific district.
+
+        ### Path Parameters
+        - `code` (required): District code
+
+        ### Query Parameters
+        - `name` (optional): Filter by village name
+        - `page` (optional): Page number
+        - **Note:** Pagination size is fixed at 100 items per page and cannot be configured
+      parameters:
+        - name: x-api-co-id
+          in: header
+          schema:
+            type: string
+          description: Your API key for authentication
+          example: '{{api_key}}'
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: District code
+          example: '110101'
+        - name: name
+          in: query
+          schema:
+            type: string
+          required: false
+          description: Filter by village name (optional)
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+          description: Page number (optional)
+          example: 1
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: Success - Villages in District
+                  value:
+                    is_success: true
+                    message: Success
+                    data:
+                      - code: '1101010001'
+                        name: LATIUNG
+                        district_code: '110101'
+                        district: TEUPAH SELATAN
+                        regency_code: '1101'
+                        regency: KABUPATEN SIMEULUE
+                        province_code: '11'
+                        province: ACEH
+                        postal_codes:
+                          - '23891'
+                        is_courier_support: true
+                      - code: '1101010002'
+                        name: LABUHAN BAJAU
+                        district_code: '110101'
+                        district: TEUPAH SELATAN
+                        regency_code: '1101'
+                        regency: KABUPATEN SIMEULUE
+                        province_code: '11'
+                        province: ACEH
+                        postal_codes:
+                          - '23891'
+                        is_courier_support: true
+                    paging:
+                      page: 1
+                      size: 100
+                      total_item: 18
+                      total_page: 1
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                Missing API Key:
+                  summary: Missing API Key
+                  value:
+                    is_success: false
+                    message: 'Missing API key in x-api-co-id header'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              examples:
+                District Not Found:
+                  summary: District Not Found
+                  value:
+                    is_success: false
+                    message: 'District not found'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              examples:
+                Rate Limit Exceeded:
+                  summary: Rate Limit Exceeded
+                  value:
+                    is_success: false
+                    message: 'Rate limit exceeded. Please try again later'
+  /regional/indonesia/villages:
+    get:
+      tags:
+        - Villages
+      summary: List All Villages
+      description: |-
+        Get all villages in Indonesia.
+
+        ### Query Parameters
+        - `district_code` (optional): Filter by district code
+        - `name` (optional): Filter by village name
+        - `postal_code` (optional): Filter by postal code
+        - `page` (optional): Page number
+        - **Note:** Pagination size is fixed at 100 items per page and cannot be configured
+      parameters:
+        - name: x-api-co-id
+          in: header
+          schema:
+            type: string
+          description: Your API key for authentication
+          example: '{{api_key}}'
+        - name: district_code
+          in: query
+          schema:
+            type: string
+          required: false
+          description: Filter by district code (optional)
+        - name: name
+          in: query
+          schema:
+            type: string
+          required: false
+          description: Filter by village name (optional)
+        - name: postal_code
+          in: query
+          schema:
+            type: string
+          required: false
+          description: Filter by postal code (optional)
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+          description: Page number (optional)
+          example: 1
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: Success - All Villages
+                  value:
+                    is_success: true
+                    message: Success
+                    data:
+                      - code: '1101010001'
+                        name: LATIUNG
+                        district_code: '110101'
+                        district: TEUPAH SELATAN
+                        regency_code: '1101'
+                        regency: KABUPATEN SIMEULUE
+                        province_code: '11'
+                        province: ACEH
+                        postal_codes:
+                          - '23891'
+                        is_courier_support: true
+                      - code: '1101010002'
+                        name: LABUHAN BAJAU
+                        district_code: '110101'
+                        district: TEUPAH SELATAN
+                        regency_code: '1101'
+                        regency: KABUPATEN SIMEULUE
+                        province_code: '11'
+                        province: ACEH
+                        postal_codes:
+                          - '23891'
+                        is_courier_support: true
+                    paging:
+                      page: 1
+                      size: 100
+                      total_item: 83916
+                      total_page: 840
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                Missing API Key:
+                  summary: Missing API Key
+                  value:
+                    is_success: false
+                    message: 'Missing API key in x-api-co-id header'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              examples:
+                Rate Limit Exceeded:
+                  summary: Rate Limit Exceeded
+                  value:
+                    is_success: false
+                    message: 'Rate limit exceeded. Please try again later'
+  /regional/indonesia/villages/{code}:
+    get:
+      tags:
+        - Villages
+      summary: Get Village by Code
+      description: |-
+        Get a specific village by code with full hierarchy information.
+
+        ### Path Parameters
+        - `code` (required): Village code (10 digits)
+      parameters:
+        - name: x-api-co-id
+          in: header
+          schema:
+            type: string
+          description: Your API key for authentication
+          example: '{{api_key}}'
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Village code (10 digits)
+          example: '1101010001'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: Success - Village by Code
+                  value:
+                    is_success: true
+                    message: Success
+                    data:
+                      code: '1101010001'
+                      name: LATIUNG
+                      district_code: '110101'
+                      district: TEUPAH SELATAN
+                      regency_code: '1101'
+                      regency: KABUPATEN SIMEULUE
+                      province_code: '11'
+                      province: ACEH
+                      postal_codes:
+                        - '23891'
+                      is_courier_support: true
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                Missing API Key:
+                  summary: Missing API Key
+                  value:
+                    is_success: false
+                    message: 'Missing API key in x-api-co-id header'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              examples:
+                Village Not Found:
+                  summary: Village Not Found
+                  value:
+                    is_success: false
+                    message: 'Village not found'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              examples:
+                Rate Limit Exceeded:
+                  summary: Rate Limit Exceeded
+                  value:
+                    is_success: false
+                    message: 'Rate limit exceeded. Please try again later'
+  /regional/indonesia/postal-codes:
+    get:
+      tags:
+        - Postal Codes (Premium)
+      summary: List All Postal Codes
+      description: |-
+        Get all postal codes. **This endpoint requires a premium subscription.**
+
+        ### Query Parameters
+        - `village_code` (optional): Filter by village code
+        - `postal_code` (optional): Filter by postal code
+        - `page` (optional): Page number
+        - **Note:** Pagination size is fixed at 100 items per page and cannot be configured
+
+        ### Error Responses
+        - `403 Forbidden`: User is not a premium member
+        - `401 Unauthorized`: User not authenticated
+      parameters:
+        - name: x-api-co-id
+          in: header
+          schema:
+            type: string
+          description: Your API key for authentication
+          example: '{{api_key}}'
+        - name: village_code
+          in: query
+          schema:
+            type: string
+          required: false
+          description: Filter by village code (optional)
+        - name: postal_code
+          in: query
+          schema:
+            type: string
+          required: false
+          description: Filter by postal code (optional)
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+          description: Page number (optional)
+          example: 1
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: Success - All Postal Codes
+                  value:
+                    is_success: true
+                    message: Success
+                    data:
+                      - id: 1
+                        postal_code: '23891'
+                        village_code: '1101010001'
+                        village: LATIUNG
+                        district_code: '110101'
+                        district: TEUPAH SELATAN
+                        regency_code: '1101'
+                        regency: KABUPATEN SIMEULUE
+                        province_code: '11'
+                        province: ACEH
+                      - id: 2
+                        postal_code: '12210'
+                        village_code: '3174050001'
+                        village: GROGOL UTARA
+                        district_code: '317405'
+                        district: KEBAYORAN LAMA
+                        regency_code: '3174'
+                        regency: KOTA JAKARTA SELATAN
+                        province_code: '31'
+                        province: DKI JAKARTA
+                    paging:
+                      page: 1
+                      size: 100
+                      total_item: 87657
+                      total_page: 877
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                Missing API Key:
+                  summary: Missing API Key
+                  value:
+                    is_success: false
+                    message: 'Missing API key in x-api-co-id header'
+        '403':
+          description: Forbidden - Premium Required
+          content:
+            application/json:
+              examples:
+                Not Premium:
+                  summary: Error - Not Premium
+                  value:
+                    is_success: false
+                    message: This endpoint is for premium members only
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              examples:
+                Rate Limit Exceeded:
+                  summary: Rate Limit Exceeded
+                  value:
+                    is_success: false
+                    message: 'Rate limit exceeded. Please try again later'
+  /regional/indonesia/postal-codes/{postal_code}:
+    get:
+      tags:
+        - Postal Codes (Premium)
+      summary: Get Villages by Postal Code
+      description: |-
+        Find villages by postal code. **This endpoint requires a premium subscription.**
+
+        ### Path Parameters
+        - `postal_code` (required): Postal code (5 digits)
+
+        ### Examples
+        ```bash
+        # Find villages with postal code 12345
+        GET /regional/indonesia/postal-codes/12345
+        ```
+
+        ### Error Responses
+        - `403 Forbidden`: User is not a premium member
+        - `401 Unauthorized`: User not authenticated
+      parameters:
+        - name: x-api-co-id
+          in: header
+          schema:
+            type: string
+          description: Your API key for authentication
+          example: '{{api_key}}'
+        - name: postal_code
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Postal code (5 digits)
+          example: '12210'
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: Success - Villages by Postal Code
+                  value:
+                    is_success: true
+                    message: Success
+                    data:
+                      - code: '3174050001'
+                        name: GROGOL UTARA
+                        district_code: '317405'
+                        district: KEBAYORAN LAMA
+                        regency_code: '3174'
+                        regency: KOTA JAKARTA SELATAN
+                        province_code: '31'
+                        province: DKI JAKARTA
+                        postal_codes:
+                          - '12210'
+                        is_courier_support: true
+                    paging:
+                      page: 1
+                      size: 100
+                      total_item: 1
+                      total_page: 1
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                Missing API Key:
+                  summary: Missing API Key
+                  value:
+                    is_success: false
+                    message: 'Missing API key in x-api-co-id header'
+        '403':
+          description: Forbidden - Premium Required
+          content:
+            application/json:
+              examples:
+                Not Premium:
+                  summary: Error - Not Premium
+                  value:
+                    is_success: false
+                    message: This endpoint is for premium members only
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              examples:
+                Postal Code Not Found:
+                  summary: Postal Code Not Found
+                  value:
+                    is_success: false
+                    message: 'Postal code not found'
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              examples:
+                Rate Limit Exceeded:
+                  summary: Rate Limit Exceeded
+                  value:
+                    is_success: false
+                    message: 'Rate limit exceeded. Please try again later'
+  /regional/indonesia/search:
+    get:
+      tags:
+        - Search (Premium)
+      summary: Search Regional Data
+      description: >-
+        Search across all regional data types by name or postal code. **This endpoint requires a premium subscription.**
+
+
+        ### Query Parameters
+
+        - `query` (required): Search term (can be a name or postal code)
+
+        - `type` (optional): Filter by type (province, regency, district, village)
+
+        - `page` (optional): Page number
+
+        - **Note:** Pagination size is fixed at 100 items per page and cannot be configured
+
+
+        ### Examples
+
+        ```bash
+        # Search by name
+        GET /regional/indonesia/search?query=jakarta
+
+        # Search by postal code
+        GET /regional/indonesia/search?query=12210
+
+        # Search only villages
+        GET /regional/indonesia/search?query=bantul&type=village
+        ```
+
+
+        ### Error Responses
+
+        - `403 Forbidden`: User is not a premium member
+
+        - `401 Unauthorized`: User not authenticated
+      parameters:
+        - name: x-api-co-id
+          in: header
+          schema:
+            type: string
+          description: Your API key for authentication
+          example: '{{api_key}}'
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Search term (required) - can be a name (province, regency, district, village) or postal code
+          example: jakarta
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum:
+              - province
+              - regency
+              - district
+              - village
+          required: false
+          description: 'Filter by type: province, regency, district, village (optional)'
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+          description: Page number (optional)
+          example: 1
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              examples:
+                success:
+                  summary: Success - Search Results
+                  value:
+                    status: success
+                    timestamp: '2025-12-25 08:55:38'
+                    result:
+                      - province_code: '31'
+                        province: DKI JAKARTA
+                        city_code: '3174'
+                        city: KOTA JAKARTA SELATAN
+                        district_code: '317405'
+                        district: KEBAYORAN LAMA
+                        village_code: '3174050001'
+                        village: GROGOL UTARA
+                        postal_code: '12210'
+                        is_courier_support: true
+                    paging:
+                      page: 1
+                      size: 100
+                      total_item: 1
+                      total_page: 1
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              examples:
+                Missing Query:
+                  summary: Missing Query Parameter
+                  value:
+                    is_success: false
+                    message: 'Query parameter is required'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              examples:
+                Missing API Key:
+                  summary: Missing API Key
+                  value:
+                    is_success: false
+                    message: 'Missing API key in x-api-co-id header'
+        '403':
+          description: Forbidden - Premium Required
+          content:
+            application/json:
+              examples:
+                Not Premium:
+                  summary: Error - Not Premium
+                  value:
+                    is_success: false
+                    message: This endpoint is for premium members only
+        '429':
+          description: Too Many Requests
+          content:
+            application/json:
+              examples:
+                Rate Limit Exceeded:
+                  summary: Rate Limit Exceeded
+                  value:
+                    is_success: false
+                    message: 'Rate limit exceeded. Please try again later'

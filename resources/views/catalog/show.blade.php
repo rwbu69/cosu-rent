@@ -37,6 +37,7 @@
                     <p class="text-xs font-semibold bg-primary text-gray-900 inline-block px-3 py-1 rounded-sm shadow-sm mb-4 uppercase tracking-wider">{{ $costume->series }}</p>
                     <h1 class="font-extrabold text-4xl text-gray-900 mb-2 leading-tight">{{ $costume->name }}</h1>
                     <p class="text-3xl font-bold text-gray-800 mt-4">Rp {{ number_format($costume->base_price, 0, ',', '.') }} <span class="text-lg text-gray-500 font-medium">/ 3 hari</span></p>
+                    <p class="text-[11px] text-red-500 font-bold italic mt-1">*Harga di atas belum termasuk ongkos kirim</p>
                     <p class="text-sm font-semibold text-gray-500 mt-2">Uang Jaminan (Deposit): Rp {{ number_format($costume->deposit_price, 0, ',', '.') }}</p>
                 </div>
 
@@ -85,7 +86,7 @@
                     <button type="submit" name="action" value="add" class="flex-1 md:flex-none bg-white text-primary border-2 border-primary font-bold px-6 py-4 rounded-sm hover:bg-primary/10 transition-colors shadow-sm whitespace-nowrap">
                         + Keranjang
                     </button>
-                    <button type="submit" name="action" value="checkout" class="flex-1 md:flex-none bg-primary text-gray-900 font-bold px-8 py-4 rounded-sm hover:bg-[#E5A5B0] transition-colors shadow-sm whitespace-nowrap">
+                    <button type="submit" name="action" value="checkout" class="flex-1 md:flex-none bg-light-primary text-gray-900 font-bold px-8 py-4 rounded-sm hover:bg-[#E5A5B0] transition-colors shadow-sm whitespace-nowrap">
                         Langsung Checkout
                     </button>
                 </div>

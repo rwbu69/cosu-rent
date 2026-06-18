@@ -7,10 +7,10 @@
             @method('PUT')
 
             @if ($errors->any())
-                <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
+                <div class="p-4 mb-4 border-l-4 border-red-500 bg-red-50">
                     <div class="flex">
                         <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                            <svg class="w-5 h-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
                                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
                             </svg>
                         </div>
@@ -27,46 +27,53 @@
             @endif
 
             <!-- Basic Info -->
-            <div class="bg-white p-8 border border-gray-200 rounded-sm shadow-sm">
-                <h3 class="text-xl font-bold mb-6 border-b border-gray-200 pb-2 text-gray-900">Informasi Dasar</h3>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="p-8 bg-white border border-gray-200 rounded-sm shadow-sm">
+                <h3 class="pb-2 mb-6 text-xl font-bold text-gray-900 border-b border-gray-200">Informasi Dasar</h3>
+
+                <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                     <div>
-                        <label class="block font-semibold mb-2 text-gray-700">Nama Kostum</label>
-                        <input type="text" name="name" value="{{ old('name', $katalog->name) }}" required class="w-full border-gray-300 rounded-sm p-3 focus:ring-0 focus:border-primary">
+                        <label class="block mb-2 font-semibold text-gray-700">Nama Kostum</label>
+                        <input type="text" name="name" value="{{ old('name', $katalog->name) }}" required class="w-full p-3 border-gray-300 rounded-sm focus:ring-0 focus:border-primary">
                     </div>
                     <div>
-                        <label class="block font-semibold mb-2 text-gray-700">Series / Anime</label>
-                        <input type="text" name="series" value="{{ old('series', $katalog->series) }}" required class="w-full border-gray-300 rounded-sm p-3 focus:ring-0 focus:border-primary">
+                        <label class="block mb-2 font-semibold text-gray-700">Series / Anime</label>
+                        <input type="text" name="series" value="{{ old('series', $katalog->series) }}" required class="w-full p-3 border-gray-300 rounded-sm focus:ring-0 focus:border-primary">
                     </div>
                     <div>
-                        <label class="block font-semibold mb-2 text-gray-700">Ukuran (Size)</label>
-                        <input type="text" name="size" value="{{ old('size', $katalog->size) }}" required class="w-full border-gray-300 rounded-sm p-3 focus:ring-0 focus:border-primary">
+                        <label class="block mb-2 font-semibold text-gray-700">Ukuran (Size)</label>
+                        <input type="text" name="size" value="{{ old('size', $katalog->size) }}" required class="w-full p-3 border-gray-300 rounded-sm focus:ring-0 focus:border-primary">
                     </div>
                     <div>
-                        <label class="block font-semibold mb-2 text-gray-700">Harga Sewa per Hari (Rp)</label>
-                        <input type="number" name="base_price" value="{{ old('base_price', $katalog->base_price) }}" required min="0" class="w-full border-gray-300 rounded-sm p-3 focus:ring-0 focus:border-primary">
+                        <label class="block mb-2 font-semibold text-gray-700">Harga Sewa per 3 Hari (Rp)</label>
+                        <input type="number" name="base_price" value="{{ old('base_price', $katalog->base_price) }}" required min="0" class="w-full p-3 border-gray-300 rounded-sm focus:ring-0 focus:border-primary">
                     </div>
                     <div>
-                        <label class="block font-semibold mb-2 text-gray-700">Harga Uang Jaminan / Deposit (Rp)</label>
-                        <input type="number" name="deposit_price" value="{{ old('deposit_price', $katalog->deposit_price) }}" required min="0" class="w-full border-gray-300 rounded-sm p-3 focus:ring-0 focus:border-primary">
+                        <label class="block mb-2 font-semibold text-gray-700">Harga Uang Jaminan / Deposit (Rp)</label>
+                        <input type="number" name="deposit_price" value="{{ old('deposit_price', $katalog->deposit_price) }}" required min="0" class="w-full p-3 border-gray-300 rounded-sm focus:ring-0 focus:border-primary">
                     </div>
                     <div>
-                        <label class="block font-semibold mb-2 text-gray-700">Gambar Kostum (Opsional jika tidak diganti)</label>
+                        <label class="block mb-2 font-semibold text-gray-700">Gambar Kostum (Opsional jika tidak diganti)</label>
                         <input type="file" name="image" accept="image/png, image/jpeg, image/jpg" class="w-full border border-gray-300 rounded-sm p-2 focus:ring-0 text-sm font-medium bg-gray-50 text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-sm file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-gray-900 hover:file:bg-[#E5A5B0]">
                     </div>
                     <div class="md:col-span-2">
-                        <label class="block font-semibold mb-2 text-gray-700">Deskripsi Singkat</label>
-                        <textarea name="description" rows="3" required class="w-full border-gray-300 rounded-sm p-3 focus:ring-0 focus:border-primary">{{ old('description', $katalog->description) }}</textarea>
+                        <label class="block mb-2 font-semibold text-gray-700">Deskripsi Singkat</label>
+                        <textarea name="description" rows="3" required class="w-full p-3 border-gray-300 rounded-sm focus:ring-0 focus:border-primary">{{ old('description', $katalog->description) }}</textarea>
+                    </div>
+                    <div class="md:col-span-2 mt-4">
+                        <label class="flex items-center space-x-3 cursor-pointer">
+                            <input type="checkbox" name="is_available" value="1" {{ old('is_available', $katalog->is_available ?? true) ? 'checked' : '' }} class="w-5 h-5 border-gray-300 rounded text-primary focus:ring-primary">
+                            <span class="font-semibold text-gray-700">Tersedia untuk Dirental</span>
+                        </label>
+                        <p class="mt-1 text-sm text-gray-500 ml-8">Centang jika kostum ini siap untuk dirental oleh pelanggan.</p>
                     </div>
                 </div>
             </div>
 
             <!-- Components (Nested Form) -->
-            <div class="bg-white p-8 border border-gray-200 rounded-sm shadow-sm">
-                <div class="flex justify-between items-center mb-6 border-b border-gray-200 pb-2">
+            <div class="p-8 bg-white border border-gray-200 rounded-sm shadow-sm">
+                <div class="flex items-center justify-between pb-2 mb-6 border-b border-gray-200">
                     <h3 class="text-xl font-bold text-gray-900">Komponen / Aksesoris</h3>
-                    <button type="button" @click="addComponent" class="bg-primary text-gray-900 font-bold px-4 py-2 rounded-sm hover:bg-[#E5A5B0] transition-colors text-sm shadow-sm">
+                    <button type="button" @click="addComponent" class="bg-light-primary text-gray-900 font-bold px-4 py-2 rounded-sm hover:bg-[#E5A5B0] transition-colors text-sm shadow-sm">
                         + Tambah Komponen
                     </button>
                 </div>
@@ -75,29 +82,29 @@
                     <template x-for="(comp, index) in components" :key="comp.temp_id">
                         <div class="flex items-start gap-4 p-4 border border-gray-200 rounded-sm bg-gray-50">
                             <input type="hidden" x-bind:name="`components[${index}][id]`" x-model="comp.id">
-                            <div class="flex-grow grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="grid flex-grow grid-cols-1 gap-4 md:grid-cols-2">
                                 <div>
-                                    <label class="block font-semibold text-gray-700 text-sm mb-1">Nama Komponen</label>
-                                    <input type="text" x-bind:name="`components[${index}][name]`" x-model="comp.name" required class="w-full border-gray-300 rounded-sm p-2 focus:ring-0 focus:border-primary text-sm">
+                                    <label class="block mb-1 text-sm font-semibold text-gray-700">Nama Komponen</label>
+                                    <input type="text" x-bind:name="`components[${index}][name]`" x-model="comp.name" required class="w-full p-2 text-sm border-gray-300 rounded-sm focus:ring-0 focus:border-primary">
                                 </div>
                                 <div>
-                                    <label class="block font-semibold text-gray-700 text-sm mb-1">Data QR Code</label>
+                                    <label class="block mb-1 text-sm font-semibold text-gray-700">Data QR Code</label>
                                     <div class="relative">
-                                        <input type="text" x-bind:name="`components[${index}][barcode]`" x-model="comp.barcode" @keydown.enter.prevent="comp.scanned = true; $event.target.blur()" required class="w-full border-gray-300 rounded-sm p-2 focus:ring-0 focus:border-primary text-sm pr-8">
+                                        <input type="text" x-bind:name="`components[${index}][barcode]`" x-model="comp.barcode" @keydown.enter.prevent="comp.scanned = true; $event.target.blur()" required class="w-full p-2 pr-8 text-sm border-gray-300 rounded-sm focus:ring-0 focus:border-primary">
                                         <svg x-cloak x-show="comp.scanned" class="absolute right-2 top-1/2 -translate-y-1/2 w-5 h-5 text-[#F2B3BD]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                                     </div>
                                 </div>
                                 <div class="md:col-span-2">
-                                    <label class="block font-semibold text-gray-700 text-sm mb-1">
+                                    <label class="block mb-1 text-sm font-semibold text-gray-700">
                                         Gambar Komponen <span class="text-red-500" x-show="!comp.has_image">*</span>
                                         <template x-if="comp.has_image">
-                                            <span class="text-xs text-primary font-bold ml-2">(Gambar sudah ada, unggah baru untuk mengganti)</span>
+                                            <span class="ml-2 text-xs font-bold text-primary">(Gambar sudah ada, unggah baru untuk mengganti)</span>
                                         </template>
                                     </label>
-                                    <input type="file" x-bind:name="`components[${index}][image]`" x-bind:required="!comp.has_image" accept="image/png, image/jpeg, image/jpg" class="w-full border border-gray-300 rounded-sm p-2 text-sm bg-white file:mr-3 file:py-1 file:px-3 file:rounded-sm file:border-0 file:text-xs file:font-bold file:bg-gray-200 file:text-gray-800 hover:file:bg-gray-300">
+                                    <input type="file" x-bind:name="`components[${index}][image]`" x-bind:required="!comp.has_image" accept="image/png, image/jpeg, image/jpg" class="w-full p-2 text-sm bg-white border border-gray-300 rounded-sm file:mr-3 file:py-1 file:px-3 file:rounded-sm file:border-0 file:text-xs file:font-bold file:bg-gray-200 file:text-gray-800 hover:file:bg-gray-300">
                                 </div>
                             </div>
-                            <button type="button" @click="removeComponent(index)" class="mt-6 bg-white text-red-600 font-bold p-2 border border-gray-300 rounded-sm hover:border-red-600 transition-colors shadow-sm" title="Hapus Komponen">
+                            <button type="button" @click="removeComponent(index)" class="p-2 mt-6 font-bold text-red-600 transition-colors bg-white border border-gray-300 rounded-sm shadow-sm hover:border-red-600" title="Hapus Komponen">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                             </button>
                         </div>
@@ -106,8 +113,8 @@
             </div>
 
             <div class="flex justify-end gap-4">
-                <a href="{{ route('admin.katalog.index') }}" class="bg-white text-gray-700 font-bold px-8 py-3 rounded-sm border border-gray-300 hover:bg-gray-50 transition-colors shadow-sm">Batal</a>
-                <button type="submit" class="bg-primary text-gray-900 font-bold px-8 py-3 rounded-sm hover:bg-[#E5A5B0] transition-colors shadow-sm">Update Kostum</button>
+                <a href="{{ route('admin.katalog.index') }}" class="px-8 py-3 font-bold text-gray-700 transition-colors bg-white border border-gray-300 rounded-sm shadow-sm hover:bg-gray-50">Batal</a>
+                <button type="submit" class="bg-light-primary text-gray-900 font-bold px-8 py-3 rounded-sm hover:bg-[#E5A5B0] transition-colors shadow-sm">Update Kostum</button>
             </div>
         </form>
     </div>
@@ -118,7 +125,7 @@
                 @php
                     $oldComponents = old('components');
                     $initialComponents = [];
-                    
+
                     if (!empty($oldComponents)) {
                         foreach($oldComponents as $comp) {
                             $initialComponents[] = [
