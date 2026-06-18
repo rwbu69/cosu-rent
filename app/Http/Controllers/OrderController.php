@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
+use App\Models\Booking;
 use App\Mail\OrderReturned;
 
 class OrderController extends Controller
@@ -71,7 +72,7 @@ class OrderController extends Controller
         return back()->with('success', 'Berhasil: Informasi resi pengiriman kembali telah disimpan. Terima kasih!');
     }
 
-    public function updatePayment(Request $request, $id)
+    public function updatePayment(Request $request, int $id)
     {
         $request->validate([
             'payment_proof' => 'required|image|mimes:jpeg,png,jpg|max:2048',
@@ -93,7 +94,7 @@ class OrderController extends Controller
         return back()->with('success', 'Berhasil: Bukti pembayaran telah diunggah. Menunggu konfirmasi admin.');
     }
 
-    public function cancel($id)
+    public function cancel(int $id)
     {
         $booking = Booking::where('user_id', Auth::id())->findOrFail($id);
 

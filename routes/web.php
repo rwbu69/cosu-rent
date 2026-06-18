@@ -21,8 +21,10 @@ Route::get('/', function () {
     return view('welcome', compact('featured'));
 });
 
-Route::get('/dashboard', function () {
-    if (auth()->user()->role === 'admin') {
+Route::get('/dashboard', function (\Illuminate\Http\Request $request) {
+    /** @var \App\Models\User $user */
+    $user = $request->user();
+    if ($user && $user->role === 'admin') {
         return redirect()->route('admin.dashboard');
     }
     return redirect()->route('catalog.index');
@@ -61,7 +63,7 @@ Route::middleware('auth')->group(function () {
         Route::get('/checkout/shipping-options', [CheckoutController::class, 'getShippingOptions'])->name('checkout.shipping-options');
     });
 
-    // Phase 4 Admin Routes
+    // Admin Routes
     Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
         Route::get('/qc-barcode', [QcController::class, 'index'])->name('qc.index');
         Route::post('/qc-barcode/scan', [QcController::class, 'scan'])->name('qc.scan');
@@ -70,7 +72,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/rfid-kiosk/scan', [KioskController::class, 'scan'])->name('kiosk.scan');
         Route::post('/rfid-kiosk/register', [KioskController::class, 'register'])->name('kiosk.register');
 
-        // Phase 4 Admin Features
         Route::get('/bookings', [AdminBookingController::class, 'index'])->name('bookings.index');
         Route::get('/bookings/history', [AdminBookingController::class, 'history'])->name('bookings.history');
         Route::post('/bookings/{booking}/confirm', [AdminBookingController::class, 'confirm'])->name('bookings.confirm');

@@ -36,7 +36,7 @@ class AdminReturnController extends Controller
         return view('admin.return.index', compact('bookings', 'selectedBooking'));
     }
 
-    public function complete(Request $request, $bookingId)
+    public function complete(Request $request, int $bookingId)
     {
         $request->validate([
             'missing_components' => 'nullable|array',
