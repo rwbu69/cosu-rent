@@ -37,7 +37,8 @@ class AdminDashboardController extends Controller
         // 4. Tersedia (Ready) - No overlapping active bookings today
         $today = Carbon::today()->toDateString();
         
-        $availableCostumes = Costume::whereDoesntHave('bookings', function ($query) use ($today) {
+        $availableCostumes = Costume::where('is_available', true)
+        ->whereDoesntHave('bookings', function ($query) use ($today) {
             $query->where('status', '!=', 'Returned')
                   ->where('status', '!=', 'Cancelled')
                   ->where('start_date', '<=', $today)
