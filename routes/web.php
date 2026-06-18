@@ -1,0 +1,84 @@
+<?php
+
+use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\QcController;
+use App\Http\Controllers\KioskController;
+use App\Http\Controllers\CatalogController;
+use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\UserAddressController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\AdminDashboardController;
+use App\Http\Controllers\AdminCatalogController;
+use App\Http\Controllers\AdminReturnController;
+use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\AdminBookingController;
+use App\Http\Controllers\AdminReportController;
+use App\Http\Controllers\CartController;
+
+Route::get('/', function () {
+    $featured = \App\Models\Costume::take(3)->get();
+    return view('welcome', compact('featured'));
+});
+
+Route::get('/dashboard', function () {
+    if (auth()->user()->role === 'admin') {
+        return redirect()->route('admin.dashboard');
+    }
+    return redirect()->route('catalog.index');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/katalog', [CatalogController::class, 'index'])->name('catalog.index');
+Route::get('/katalog/{id}', [CatalogController::class, 'show'])->name('catalog.show');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Pesanan (Riwayat)
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    Route::post('/orders/{id}/received', [OrderController::class, 'received'])->name('orders.received');
+    Route::post('/orders/{id}/return', [OrderController::class, 'returnShipping'])->name('orders.returnShipping');
+
+    // Alamat
+    Route::get('/profil/alamat', [UserAddressController::class, 'index'])->name('address.index');
+    Route::post('/profil/alamat', [UserAddressController::class, 'store'])->name('address.store');
+    Route::delete('/profil/alamat/{id}', [UserAddressController::class, 'destroy'])->name('address.destroy');
+    Route::patch('/profil/alamat/{id}/primary', [UserAddressController::class, 'setPrimary'])->name('address.primary');
+
+    // Cart
+    Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
+    Route::delete('/cart/{cartItem}', [CartController::class, 'destroy'])->name('cart.destroy');
+
+    // Checkout flow
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout', [CheckoutController::class, 'store'])->name('checkout.store');
+
+    // Phase 4 Admin Routes
+    Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/qc-barcode', [QcController::class, 'index'])->name('qc.index');
+        Route::post('/qc-barcode/scan', [QcController::class, 'scan'])->name('qc.scan');
+
+        Route::get('/rfid-kiosk', [KioskController::class, 'index'])->name('kiosk.index');
+        Route::post('/rfid-kiosk/scan', [KioskController::class, 'scan'])->name('kiosk.scan');
+
+        // Phase 4 Admin Features
+        Route::get('/bookings', [AdminBookingController::class, 'index'])->name('bookings.index');
+        Route::post('/bookings/{booking}/confirm', [AdminBookingController::class, 'confirm'])->name('bookings.confirm');
+        Route::post('/bookings/{booking}/ship', [AdminBookingController::class, 'ship'])->name('bookings.ship');
+
+        Route::get('/laporan', [AdminReportController::class, 'index'])->name('report.index');
+        Route::get('/laporan/export', [AdminReportController::class, 'export'])->name('report.export');
+
+        Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+        Route::resource('katalog', AdminCatalogController::class);
+        Route::get('/return', [AdminReturnController::class, 'index'])->name('return.index');
+        Route::post('/return/{bookingId}/complete', [AdminReturnController::class, 'complete'])->name('return.complete');
+
+        Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+        Route::get('/users/{user}', [AdminUserController::class, 'show'])->name('users.show');
+    });
+});
+
+require __DIR__.'/auth.php';
