@@ -10,3 +10,4 @@ Artisan::command('inspire', function () {
 use Illuminate\Support\Facades\Schedule;
 
 Schedule::command('app:send-return-reminders')->daily();
+Schedule::command('booking:auto-cancel')->hourly();

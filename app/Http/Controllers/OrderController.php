@@ -70,4 +70,38 @@ class OrderController extends Controller
 
         return back()->with('success', 'Berhasil: Informasi resi pengiriman kembali telah disimpan. Terima kasih!');
     }
+
+    public function updatePayment(Request $request, $id)
+    {
+        $request->validate([
+            'payment_proof' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        $booking = Booking::where('user_id', Auth::id())->findOrFail($id);
+
+        if (!in_array($booking->status, ['Menunggu Pembayaran', 'Pembayaran Ditolak'])) {
+            return back()->with('error', 'Gagal: Tidak dapat mengunggah bukti bayar pada status ini.');
+        }
+
+        $paymentPath = $request->file('payment_proof')->store('payments', 'public');
+        
+        $booking->update([
+            'payment_proof' => $paymentPath,
+            'status' => 'Menunggu Konfirmasi',
+        ]);
+
+        return back()->with('success', 'Berhasil: Bukti pembayaran telah diunggah. Menunggu konfirmasi admin.');
+    }
+
+    public function cancel($id)
+    {
+        $booking = Booking::where('user_id', Auth::id())->findOrFail($id);
+
+        if (!in_array($booking->status, ['Menunggu Pembayaran', 'Menunggu Hitung Ongkir'])) {
+            return back()->with('error', 'Gagal: Pesanan tidak dapat dibatalkan.');
+        }
+
+        $booking->update(['status' => 'Dibatalkan']);
+        return back()->with('success', 'Berhasil: Pesanan telah dibatalkan.');
+    }
 }

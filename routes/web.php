@@ -40,6 +40,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     Route::post('/orders/{id}/received', [OrderController::class, 'received'])->name('orders.received');
     Route::post('/orders/{id}/return', [OrderController::class, 'returnShipping'])->name('orders.returnShipping');
+    Route::post('/orders/{id}/payment', [OrderController::class, 'updatePayment'])->name('orders.payment');
+    Route::post('/orders/{id}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
 
     Route::middleware(['auth'])->group(function () {
         Route::get('/profile/address', [UserAddressController::class, 'index'])->name('address.index');

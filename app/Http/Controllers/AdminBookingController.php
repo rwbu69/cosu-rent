@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use App\Mail\OrderConfirmed;
 use App\Mail\OrderShipped;
+use App\Mail\PaymentRejected;
 use Illuminate\Http\Request;
 
 class AdminBookingController extends Controller
@@ -101,5 +102,22 @@ class AdminBookingController extends Controller
         }
 
         return back()->with('success', 'Berhasil: Pesanan dilabeli Sedang Dikirim dan data pengiriman disimpan.');
+    }
+
+    public function reject(Request $request, Booking $booking)
+    {
+        if ($booking->status !== 'Menunggu Konfirmasi') {
+            return back()->with('error', 'Gagal: Hanya pesanan Menunggu Konfirmasi yang bisa ditolak.');
+        }
+
+        $booking->update(['status' => 'Pembayaran Ditolak']);
+
+        try {
+            Mail::to($booking->user->email)->send(new PaymentRejected($booking));
+        } catch (\Exception $e) {
+            Log::error('Failed to send PaymentRejected email: ' . $e->getMessage());
+        }
+
+        return back()->with('success', 'Berhasil: Pembayaran ditolak dan email pemberitahuan telah dikirim ke pelanggan.');
     }
 }

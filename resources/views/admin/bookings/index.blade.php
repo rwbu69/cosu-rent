@@ -73,6 +73,10 @@
                                         @csrf
                                         <button type="submit" class="inline-block bg-light-primary text-gray-900 rounded-sm px-4 py-2 font-semibold hover:bg-[#E5A5B0] transition-colors shadow-sm">Konfirmasi</button>
                                     </form>
+                                    <form action="{{ route('admin.bookings.reject', $booking->id) }}" method="POST" class="inline-block" x-data @submit.prevent="$dispatch('open-confirm', { title: 'Tolak Pembayaran', message: 'Anda yakin ingin menolak bukti bayar ini?', form: $el })">
+                                        @csrf
+                                        <button type="submit" class="inline-block bg-red-100 text-red-700 rounded-sm px-4 py-2 font-semibold hover:bg-red-200 border border-red-200 transition-colors shadow-sm">Tolak</button>
+                                    </form>
                                 @elseif($booking->status === 'Diproses')
                                     <button type="button" @click="currentBooking = { courier: '{{ strtoupper(str_replace('_', ' - ', $booking->shipping_courier ?? 'Ekspedisi')) }}' }; shipActionUrl = '{{ route('admin.bookings.ship', $booking->id) }}'; shipModalOpen = true" class="inline-block bg-blue-500 text-white rounded-sm px-4 py-2 font-semibold hover:bg-blue-600 transition-colors shadow-sm">Kirim</button>
                                 @elseif(in_array($booking->status, ['Dikirim Kembali', 'Returned']))
